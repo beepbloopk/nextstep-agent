@@ -1,0 +1,41 @@
+{
+  "scenario": {
+    "id": "s3_contradictory",
+    "type": "Contradictory",
+    "input": "My deadline is Friday… actually wait, I think the professor said Thursday. I have no savings but I can probably borrow from my roommate, although we're not talking right now."
+  },
+  "model": "gemini-3.8-flash",
+  "runAt": "2026-09-26T15:52:00.981Z",
+  "turns": [
+    {
+      "runId": "run_5c8cec3f",
+      "situationId": "sit_2ddba8e1",
+      "situationVersion": 1,
+      "mode": "normal",
+      "status": "error",
+      "response": "I couldn't reach my reasoning service just now, so I haven't changed or sent anything. Your situation is saved. Try again in a minute.",
+      "questions": [],
+      "pendingActions": [],
+      "notices": [],
+      "assessment": null,
+      "priority": null,
+      "budget": {
+        "toolCallsUsed": 0,
+        "maxToolCalls": 10,
+        "exhausted": false
+      },
+      "findingsSoFar": [],
+      "trace": [
+        {
+          "step": 1,
+          "label": "reasoning",
+          "phase": "recommend",
+          "kind": "model_unavailable",
+          "at": "2026-09-26T15:52:00.970Z",
+          "summary": "Model call failed: Gemini request failed: HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota ex"
+        }
+      ],
+      "modelsUsed": []
+    }
+  ]
+}

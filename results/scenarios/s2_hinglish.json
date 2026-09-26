@@ -1,0 +1,432 @@
+{
+  "scenario": {
+    "id": "s2_hinglish",
+    "type": "Hinglish",
+    "input": "Kal submission hai, laptop dead ho gaya, aur landlord bol raha hai 5 tareekh tak flat khaali karo. Paise bhi nahi hai abhi."
+  },
+  "model": "gemini-3.8-flash",
+  "runAt": "2026-09-26T15:49:07.104Z",
+  "turns": [
+    {
+      "runId": "run_70384e74",
+      "situationId": "sit_50252e2a",
+      "situationVersion": 1,
+      "mode": "normal",
+      "status": "completed",
+      "response": "**Top Priority:** Kal ka submission handle karna sabse pehle zaroori hai, kyunki deadline 24 ghante ke andar hai jabki flat khaali karne ke liye 5 October tak (lagbhag 9 din) ka time hai.\n\nSabse pehle yeh 3 steps lo:\n\n1. **Professor/Evaluator ko turant inform karo:** Phone se abhi extension ki request bhej do taaki submission miss hone par penalty na lage. Maine aapke liye ek draft email taiyaar karke save kar diya hai:\n   - *Subject:* Urgent: Request for brief extension due to hardware failure - [Aapka Naam]\n   - *Draft:* Laptop dead hone ki sachhi baat batakar kal shaam tak ka extension maang lo.\n\n2. **Submission ke liye backup laptop arrange karo:** Kal subah kisi dost, flatmate ya college lab/cyber cafe se 1-2 ghante ke liye laptop borrow karo aur kaam submit karo (agar cloud/drive/email par draft saved hai toh phone se pehle check kar lo).\n\n3. **Landlord aur paise ka issue kal tackle karo:** Submission hone ke baad, landlord se shaanti se baat karke 5 tareekh ke baad tak ka extension maango ya agreement notice period point out karo. Tab tak kisi dost/family se emergency backup ya advance salary/pocket money ka option dekh sakte hain.",
+      "questions": [],
+      "pendingActions": [],
+      "notices": [
+        "Saved a draft to Professor / Evaluator (not sent).",
+        "Created 3 task(s): Submission extension ke liye professor ko email bhejo; Dost ya lab se alternate laptop arrange karo; Landlord se baat karke thoda time maango. You can undo any of them."
+      ],
+      "assessment": {
+        "risk_signals": [],
+        "problems": [
+          {
+            "deadline_text": "Kal submission hai",
+            "category": "academic",
+            "title": "Academic/work submission due tomorrow with dead laptop",
+            "urgency": "critical",
+            "id": "p1",
+            "facts": [
+              "Submission due tomorrow",
+              "Laptop is dead"
+            ]
+          },
+          {
+            "title": "Dead laptop",
+            "category": "tech",
+            "id": "p2",
+            "urgency": "high",
+            "facts": [
+              "Laptop dead ho gaya"
+            ],
+            "deadline_text": null
+          },
+          {
+            "id": "p3",
+            "category": "housing",
+            "deadline_text": "5 tareekh tak flat khaali karo",
+            "urgency": "high",
+            "facts": [
+              "Landlord asking to vacate by the 5th"
+            ],
+            "title": "Landlord asking to vacate flat by 5th"
+          },
+          {
+            "category": "money",
+            "facts": [
+              "Paise bhi nahi hai abhi"
+            ],
+            "id": "p4",
+            "deadline_text": null,
+            "urgency": "high",
+            "title": "Lack of funds / rent issue"
+          }
+        ],
+        "language": "Hinglish",
+        "request_type": "situation_help",
+        "contradictions": [],
+        "top_priority": {
+          "why": "Submission kal hai (next 24 hours), aur bina working machine ke deadline miss ho sakti hai. Housing/landlord issue 5 tareekh tak ka hai, isliye immediate priority kal ka submission handle karna hai.",
+          "next_action": "Professor ya guide ko turant honestly inform karo laptop issue ke baare mein aur short extension ya mobile/lab alternate submission ke liye pucho.",
+          "problem_id": "p1"
+        },
+        "missing_info": [
+          "Exact submission time on Sunday",
+          "Subject/professor/manager details for submission",
+          "Rental agreement terms / why landlord is asking to vacate",
+          "Amount of rent due or financial shortfall"
+        ],
+        "untrusted_instructions_seen": [],
+        "risk_level": "none"
+      },
+      "priority": {
+        "ranked": [
+          {
+            "id": "p1",
+            "title": "Academic/work submission due tomorrow with dead laptop",
+            "score": 65,
+            "reasons": [
+              "urgency critical (+40)",
+              "category academic (+15)",
+              "deadline within 72h: Sun, 27 Sept, 2026, 11:59 pm (+10)"
+            ]
+          },
+          {
+            "id": "p3",
+            "title": "Landlord asking to vacate flat by 5th",
+            "score": 45,
+            "reasons": [
+              "urgency high (+30)",
+              "category housing (+15)"
+            ]
+          },
+          {
+            "id": "p4",
+            "title": "Lack of funds / rent issue",
+            "score": 42,
+            "reasons": [
+              "urgency high (+30)",
+              "category money (+12)"
+            ]
+          },
+          {
+            "id": "p2",
+            "title": "Dead laptop",
+            "score": 40,
+            "reasons": [
+              "urgency high (+30)",
+              "category tech (+10)"
+            ]
+          }
+        ],
+        "top": [
+          {
+            "id": "p1",
+            "title": "Academic/work submission due tomorrow with dead laptop",
+            "score": 65,
+            "reasons": [
+              "urgency critical (+40)",
+              "category academic (+15)",
+              "deadline within 72h: Sun, 27 Sept, 2026, 11:59 pm (+10)"
+            ]
+          }
+        ],
+        "tie": false,
+        "modelPick": "p1",
+        "agreesWithModel": true
+      },
+      "budget": {
+        "toolCallsUsed": 4,
+        "maxToolCalls": 10,
+        "exhausted": false
+      },
+      "findingsSoFar": [
+        {
+          "tool": "calculateTime",
+          "summary": "\"Kal\" = Sun, 27 Sept, 2026, 11:59 pm (1 day 2 hours 41 minutes left)"
+        },
+        {
+          "tool": "calculateTime",
+          "summary": "\"5 tareekh\" = Mon, 5 Oct, 2026, 11:59 pm (9 days 2 hours 41 minutes left)"
+        },
+        {
+          "tool": "draftMessage",
+          "summary": "draft draft_a0bff922 to Professor / Evaluator"
+        },
+        {
+          "tool": "createTask",
+          "summary": "tasks: Submission extension ke liye professor ko email bhejo; Dost ya lab se alternate laptop arrange karo; Landlord se baat karke thoda time maango"
+        }
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "label": "reasoning",
+          "phase": "understand",
+          "kind": "assessment",
+          "at": "2026-09-26T15:48:05.096Z",
+          "summary": "4 problem(s); request_type=situation_help; risk=none.",
+          "detail": {
+            "risk_signals": [],
+            "problems": [
+              {
+                "deadline_text": "Kal submission hai",
+                "category": "academic",
+                "title": "Academic/work submission due tomorrow with dead laptop",
+                "urgency": "critical",
+                "id": "p1",
+                "facts": [
+                  "Submission due tomorrow",
+                  "Laptop is dead"
+                ]
+              },
+              {
+                "title": "Dead laptop",
+                "category": "tech",
+                "id": "p2",
+                "urgency": "high",
+                "facts": [
+                  "Laptop dead ho gaya"
+                ],
+                "deadline_text": null
+              },
+              {
+                "id": "p3",
+                "category": "housing",
+                "deadline_text": "5 tareekh tak flat khaali karo",
+                "urgency": "high",
+                "facts": [
+                  "Landlord asking to vacate by the 5th"
+                ],
+                "title": "Landlord asking to vacate flat by 5th"
+              },
+              {
+                "category": "money",
+                "facts": [
+                  "Paise bhi nahi hai abhi"
+                ],
+                "id": "p4",
+                "deadline_text": null,
+                "urgency": "high",
+                "title": "Lack of funds / rent issue"
+              }
+            ],
+            "language": "Hinglish",
+            "request_type": "situation_help",
+            "contradictions": [],
+            "top_priority": {
+              "why": "Submission kal hai (next 24 hours), aur bina working machine ke deadline miss ho sakti hai. Housing/landlord issue 5 tareekh tak ka hai, isliye immediate priority kal ka submission handle karna hai.",
+              "next_action": "Professor ya guide ko turant honestly inform karo laptop issue ke baare mein aur short extension ya mobile/lab alternate submission ke liye pucho.",
+              "problem_id": "p1"
+            },
+            "missing_info": [
+              "Exact submission time on Sunday",
+              "Subject/professor/manager details for submission",
+              "Rental agreement terms / why landlord is asking to vacate",
+              "Amount of rent due or financial shortfall"
+            ],
+            "untrusted_instructions_seen": [],
+            "risk_level": "none"
+          }
+        },
+        {
+          "step": 2,
+          "label": "reasoning",
+          "phase": "reason",
+          "kind": "priority_ranked",
+          "at": "2026-09-26T15:48:05.096Z",
+          "summary": "Top priority (code-ranked): Academic/work submission due tomorrow with dead laptop. Model's own pick agrees.",
+          "detail": {
+            "ranked": [
+              {
+                "id": "p1",
+                "title": "Academic/work submission due tomorrow with dead laptop",
+                "score": 65,
+                "reasons": [
+                  "urgency critical (+40)",
+                  "category academic (+15)",
+                  "deadline within 72h: Sun, 27 Sept, 2026, 11:59 pm (+10)"
+                ]
+              },
+              {
+                "id": "p3",
+                "title": "Landlord asking to vacate flat by 5th",
+                "score": 45,
+                "reasons": [
+                  "urgency high (+30)",
+                  "category housing (+15)"
+                ]
+              },
+              {
+                "id": "p4",
+                "title": "Lack of funds / rent issue",
+                "score": 42,
+                "reasons": [
+                  "urgency high (+30)",
+                  "category money (+12)"
+                ]
+              },
+              {
+                "id": "p2",
+                "title": "Dead laptop",
+                "score": 40,
+                "reasons": [
+                  "urgency high (+30)",
+                  "category tech (+10)"
+                ]
+              }
+            ],
+            "top": [
+              {
+                "id": "p1",
+                "title": "Academic/work submission due tomorrow with dead laptop",
+                "score": 65,
+                "reasons": [
+                  "urgency critical (+40)",
+                  "category academic (+15)",
+                  "deadline within 72h: Sun, 27 Sept, 2026, 11:59 pm (+10)"
+                ]
+              }
+            ],
+            "tie": false,
+            "modelPick": "p1",
+            "agreesWithModel": true
+          }
+        },
+        {
+          "step": 3,
+          "label": "executed",
+          "phase": "use_tools",
+          "kind": "calculateTime",
+          "at": "2026-09-26T15:48:06.318Z",
+          "summary": "\"Kal\" = Sun, 27 Sept, 2026, 11:59 pm (1 day 2 hours 41 minutes left)",
+          "detail": {
+            "expression": "Kal",
+            "timezone": "Asia/Kolkata",
+            "now": {
+              "iso": "2026-09-26T15:48:06.317Z",
+              "local": "Sat, 26 Sept, 2026, 9:18 pm"
+            },
+            "resolved": {
+              "iso": "2026-09-27T18:29:00.000Z",
+              "local": "Sun, 27 Sept, 2026, 11:59 pm",
+              "date": "2026-09-27",
+              "interpretation": "the next calendar day"
+            },
+            "timeSpecified": false,
+            "remaining": "1 day 2 hours 41 minutes",
+            "minutesRemaining": 1601,
+            "alreadyPassed": false,
+            "ambiguous": false,
+            "alternatives": [],
+            "assumptions": [
+              "\"kal\" can mean yesterday or tomorrow; assumed tomorrow because this is a deadline.",
+              "No time was given, so the deadline is set to 11:59pm that day. Ask for the exact time if it matters."
+            ],
+            "needsUserConfirmation": false
+          }
+        },
+        {
+          "step": 4,
+          "label": "executed",
+          "phase": "use_tools",
+          "kind": "calculateTime",
+          "at": "2026-09-26T15:48:07.441Z",
+          "summary": "\"5 tareekh\" = Mon, 5 Oct, 2026, 11:59 pm (9 days 2 hours 41 minutes left)",
+          "detail": {
+            "expression": "5 tareekh",
+            "timezone": "Asia/Kolkata",
+            "now": {
+              "iso": "2026-09-26T15:48:07.440Z",
+              "local": "Sat, 26 Sept, 2026, 9:18 pm"
+            },
+            "resolved": {
+              "iso": "2026-10-05T18:29:00.000Z",
+              "local": "Mon, 5 Oct, 2026, 11:59 pm",
+              "date": "2026-10-05",
+              "interpretation": "the 5th"
+            },
+            "timeSpecified": false,
+            "remaining": "9 days 2 hours 41 minutes",
+            "minutesRemaining": 13121,
+            "alreadyPassed": false,
+            "ambiguous": false,
+            "alternatives": [],
+            "assumptions": [
+              "The 5th has already passed this month, so assumed the 5th of next month.",
+              "No time was given, so the deadline is set to 11:59pm that day. Ask for the exact time if it matters."
+            ],
+            "needsUserConfirmation": false
+          }
+        },
+        {
+          "step": 5,
+          "label": "executed",
+          "phase": "use_tools",
+          "kind": "draft_saved",
+          "at": "2026-09-26T15:49:02.416Z",
+          "summary": "Draft draft_a0bff922 to Professor / Evaluator saved. Nothing sent.",
+          "detail": {
+            "ok": true,
+            "draftId": "draft_a0bff922",
+            "recipient": "Professor / Evaluator",
+            "channel": "email",
+            "subject": "Urgent: Request for brief extension due to hardware failure - [Your Name]",
+            "body": "Respected Sir/Ma'am,\n\nI am writing to inform you that my laptop unexpectedly crashed/stopped working tonight while I was finalizing my submission scheduled for tomorrow. \n\nI am actively trying to arrange an alternative system (borrowing from a friend / college lab tomorrow). In case of a slight delay, could you please grant me a short extension until tomorrow evening? I will submit whatever work I have backed up as soon as possible.\n\nSincerely,\n[Your Name]\n[Roll Number / ID]",
+            "purpose": "Request urgent extension due to laptop failure for submission due tomorrow",
+            "note": "Draft saved. Nothing has been sent."
+          }
+        },
+        {
+          "step": 6,
+          "label": "executed",
+          "phase": "use_tools",
+          "kind": "createTask",
+          "at": "2026-09-26T15:49:04.152Z",
+          "summary": "Batch batch_8155220c: created 3 task(s).",
+          "detail": {
+            "batchId": "batch_8155220c",
+            "status": "complete",
+            "succeeded": [
+              {
+                "index": 0,
+                "taskId": "task_2db39edc",
+                "title": "Submission extension ke liye professor ko email bhejo",
+                "due": "2026-09-26T18:29:00.000Z"
+              },
+              {
+                "index": 1,
+                "taskId": "task_2d5670ee",
+                "title": "Dost ya lab se alternate laptop arrange karo",
+                "due": "2026-09-27T18:29:00.000Z"
+              },
+              {
+                "index": 2,
+                "taskId": "task_6b2bcd8f",
+                "title": "Landlord se baat karke thoda time maango",
+                "due": "2026-09-27T18:29:00.000Z"
+              }
+            ],
+            "failed": [],
+            "remaining": [],
+            "recovery": null
+          }
+        },
+        {
+          "step": 7,
+          "label": "reasoning",
+          "phase": "recommend",
+          "kind": "recommendation",
+          "at": "2026-09-26T15:49:07.094Z",
+          "summary": "**Top Priority:** Kal ka submission handle karna sabse pehle zaroori hai, kyunki deadline 24 ghante ke andar hai jabki flat khaali karne ke liye 5 October tak (lagbhag 9 din) ka time hai.\n\nSabse pehle yeh 3 steps lo:\n\n1. **Professor/Evaluator ko turant inform karo:** Phone se abhi extension ki request bhej do taaki submission miss hone par penalty na lage. Maine aapke liye ek draft email taiyaar karke save kar diya hai:\n   - *Subject:* Urgent: Request for brief extension due to hardware failure - [Aapka Naam]\n   - *Draft:* Laptop dead hone ki sachhi baat batakar kal shaam tak ka extension maang lo.\n\n2. **Submission ke liye backup laptop arrange karo:** Kal subah kisi dost, flatmate ya college lab/cyber cafe se 1-2 ghante ke liye laptop borrow karo aur kaam submit karo (agar cloud/drive/email par draft saved hai toh phone se pehle check kar lo).\n\n3. **Landlord aur paise ka issue kal tackle karo:** Submission hone ke baad, landlord se shaanti se baat karke 5 tareekh ke baad tak ka extension maango ya agreement notice period point out karo. Tab tak kisi dost/family se emergency backup ya advance salary/pocket money ka option dekh sakte hain."
+        }
+      ],
+      "modelsUsed": [
+        "gemini-3.8-flash"
+      ]
+    }
+  ]
+}

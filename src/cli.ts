@@ -7,6 +7,7 @@ import { systemClock } from "./clock.ts";
 import { config } from "./config.ts";
 import { createModel, missingKeyMessage } from "./providers.ts";
 import { SituationStore } from "./store.ts";
+import { draftsIn } from "./trace.ts";
 import { MockOutbox } from "./tools/sendMessage.ts";
 
 if (!config.hasApiKey) {
@@ -26,6 +27,11 @@ const agent = new NextStepAgent({
 function show(r: RunResult) {
   console.log(`\n${r.response}\n`);
   for (const n of r.notices) console.log(`  (done) ${n}`);
+  for (const d of draftsIn(r.trace)) {
+    console.log(`\n  Draft ${d.draftId} (saved, NOT sent) to ${d.recipient} via ${d.channel}:`);
+    if (d.subject) console.log(`  Subject: ${d.subject}`);
+    console.log(d.body.split("\n").map((l) => "  | " + l).join("\n"));
+  }
 }
 
 async function handlePending(r: RunResult) {

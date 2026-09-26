@@ -57,3 +57,10 @@ export class Trace {
     writeFileSync(file, JSON.stringify(this.toJSON(), null, 2) + "\n", "utf8");
   }
 }
+
+/** Drafts saved during a run, read back from their trace steps (so any saved trace can show them). */
+export function draftsIn(steps: TraceStep[]): { draftId: string; recipient: string; channel: string; subject?: string; body: string }[] {
+  return steps
+    .filter((s) => s.kind === "draft_saved" && s.detail)
+    .map((s) => s.detail as { draftId: string; recipient: string; channel: string; subject?: string; body: string });
+}

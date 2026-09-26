@@ -23,7 +23,7 @@ const provider: "gemini" | "anthropic" =
 export const config = {
   provider,
   // Model strings change; read from env. Defaults are each provider's small/fast model.
-  model: provider === "gemini" ? process.env.GEMINI_MODEL || "gemini-3.8-flash" : process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
+  model: provider === "gemini" ? process.env.GEMINI_MODEL || "gemini-3.8-flash,gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash,gemini-3.5-flash-lite" : process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
   hasApiKey: Boolean(provider === "gemini" ? process.env.GEMINI_API_KEY : process.env.ANTHROPIC_API_KEY),
   timezone: process.env.NEXTSTEP_TZ || "Asia/Kolkata",
   dataDir: path.resolve(process.env.NEXTSTEP_DATA_DIR || "./data"),

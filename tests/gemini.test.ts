@@ -24,11 +24,12 @@ test("gemini: forced tool choice, system prompt, tool results by name, thought s
       tool_choice: { type: "tool", name: "recordAssessment" },
       messages: [
         { role: "user", content: "hi" },
-        { role: "assistant", content: [{ type: "tool_use", id: "t1", name: "calculateTime", input: { expression: "kal" }, gemini_signature: "SIG" } as never] },
+        { role: "assistant", content: [{ type: "tool_use", id: "t1", name: "calculateTime", input: { expression: "kal" }, gemini_signature: "SIG", gemini_model: "m1" } as never] },
         { role: "user", content: [{ type: "tool_result", tool_use_id: "t1", content: "{}" }] },
       ],
     },
     { thinkingBudget: 0 },
+    "m1",
   ) as any;
   assert.deepEqual(body.toolConfig.functionCallingConfig, { mode: "ANY", allowedFunctionNames: ["recordAssessment"] });
   assert.equal(body.systemInstruction.parts[0].text, "SYS");
@@ -83,4 +84,37 @@ test("gemini: the real agent loop runs end to end through the adapter", async ()
   assert.ok(r.response.includes("viva"));
   // The tool result went back as a functionResponse named after the tool.
   assert.equal(bodies[2].contents.at(-1).parts[0].functionResponse.name, "calculateTime");
+});
+
+test("gemini: a signature from another model is replaced by the documented placeholder", () => {
+  const body = toGeminiRequest(
+    {
+      model: "x",
+      max_tokens: 10,
+      messages: [
+        { role: "user", content: "hi" },
+        { role: "assistant", content: [{ type: "tool_use", id: "t1", name: "calculateTime", input: {}, gemini_signature: "SIG", gemini_model: "m1" } as never] },
+        { role: "user", content: [{ type: "tool_result", tool_use_id: "t1", content: "{}" }] },
+      ],
+    },
+    null,
+    "m2",
+  ) as any;
+  assert.equal(body.contents[1].parts[0].thoughtSignature, "skip_thought_signature_validator");
+});
+
+test("gemini: daily quota on the first model falls back to the next, and remembers it", async () => {
+  const hits: string[] = [];
+  const fakeFetch = (async (url: string) => {
+    const model = url.match(/models\/([^:]+):/)![1];
+    hits.push(model);
+    if (model === "a") return new Response('{"error":{"details":[{"violations":[{"quotaId":"GenerateRequestsPerDayPerProjectPerModel-FreeTier"}]},{"retryDelay":"30s"}]}}', { status: 429 });
+    return new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "from b" }] }, finishReason: "STOP" }] }), { status: 200 });
+  }) as unknown as typeof fetch;
+  const g = new GeminiModel("a,b", "k", { fetchImpl: fakeFetch, sleep: async () => {} });
+  const m1 = await g.create({ model: "x", max_tokens: 10, messages: [{ role: "user", content: "hi" }] });
+  const m2 = await g.create({ model: "x", max_tokens: 10, messages: [{ role: "user", content: "hi" }] });
+  assert.equal(m1.model, "b");
+  assert.equal(m2.model, "b");
+  assert.deepEqual(hits, ["a", "b", "b"], "a is not retried after its daily quota is gone");
 });

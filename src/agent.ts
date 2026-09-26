@@ -43,6 +43,8 @@ export interface RunResult {
   priority: PriorityResult | null;
   budget: { toolCallsUsed: number; maxToolCalls: number; exhausted: boolean };
   findingsSoFar: { tool: string; summary: string }[];
+  /** Which model(s) actually answered this run (a provider fallback chain can use more than one). */
+  modelsUsed: string[];
   trace: TraceStep[];
 }
 
@@ -61,7 +63,7 @@ interface ToolOutcome {
 }
 
 function noEmDash(s: string): string {
-  return s.replace(/\s*—\s*/g, " - ");
+  return s.replace(/\s*\u2014\s*/g, " - ");
 }
 
 function escapeHarnessTags(s: string): string {
@@ -96,6 +98,13 @@ export class NextStepAgent {
   }
 
   /** Understand a brand-new situation and act on it. */
+  /** Understand + Reason only (screens, structured assessment, ranking). No tools run. */
+  async assess(input: RunInput): Promise<RunResult> {
+    const sid = this.store.newSituationId();
+    updateSituation(this.store, sid, { text: input.text, pasted: input.pasted, reason: "initial description" }, "user");
+    return this.run(sid, this.newTrace(sid), true);
+  }
+
   async start(input: RunInput, trace?: Trace): Promise<RunResult> {
     const sid = this.store.newSituationId();
     updateSituation(this.store, sid, { text: input.text, pasted: input.pasted, reason: "initial description" }, "user");
@@ -170,7 +179,7 @@ export class NextStepAgent {
     return `<situation_history>\n${history}\n</situation_history>` + (notes.length ? `\n\n<harness_notes>\n- ${notes.join("\n- ")}\n</harness_notes>` : "");
   }
 
-  private async run(sid: string, trace: Trace): Promise<RunResult> {
+  private async run(sid: string, trace: Trace, assessOnly = false): Promise<RunResult> {
     const now = this.store.clock.now();
     const tz = config.timezone;
     const vs = versions(this.store, sid);
@@ -191,6 +200,7 @@ export class NextStepAgent {
       priority: null,
       budget: { toolCallsUsed: 0, maxToolCalls: this.maxToolCalls, exhausted: false },
       findingsSoFar: [],
+      modelsUsed: [],
       trace: trace.steps,
     };
     const finish = (): RunResult => {
@@ -241,6 +251,10 @@ export class NextStepAgent {
     } catch (err) {
       return this.degraded(result, trace, err, finish);
     }
+    const noteModel = (m: string) => {
+      if (!result.modelsUsed.includes(m)) result.modelsUsed.push(m);
+    };
+    noteModel(first.model);
     const aBlock = first.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === "recordAssessment");
     if (!aBlock) return this.degraded(result, trace, new Error("model did not return an assessment"), finish);
     const assessment = aBlock.input as Assessment;
@@ -263,6 +277,10 @@ export class NextStepAgent {
     if (assessment.risk_level && assessment.risk_level !== "none") {
       trace.add("reasoning", "understand", "risk_detected", `Model assessment flagged risk (${assessment.risk_level}): ${assessment.risk_signals.join(", ")}. Switching to support mode.`);
       return this.support(result, trace, userText, finish);
+    }
+    if (assessOnly) {
+      result.response = "(assessment only: no tools run)";
+      return finish();
     }
     if (assessment.request_type === "harmful") {
       const r = screenRequest(userText) ?? {
@@ -299,6 +317,7 @@ export class NextStepAgent {
       let resp: Anthropic.Message;
       try {
         resp = await this.model.create({ model: config.model, max_tokens: 2048, temperature: 0, system, tools: actionTools, messages });
+        noteModel(resp.model);
       } catch (err) {
         return this.degraded(result, trace, err, finish);
       }
@@ -485,6 +504,7 @@ export class NextStepAgent {
         system: supportSystemPrompt(),
         messages: [{ role: "user", content: `<user_message>\n${escapeHarnessTags(userText)}\n</user_message>` }],
       });
+      result.modelsUsed.push(resp.model);
       const t = resp.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("\n").trim();
       if (t && !looksLikeTaskList(t) && /14416/.test(t)) text = t;
       else trace.add("reasoning", "recommend", "support_fallback_used", "Model reply was empty, list-shaped, or missing the helpline; used the reviewed fallback text.");
