@@ -83,6 +83,7 @@ export function renderRun(r: RunResult, heading?: string): string {
   }
   for (const p of r.pendingActions) {
     out.push("", `**Waiting for confirmation (${p.actionId}), exact text the user sees:**`, "", "```text", p.exactText ?? "", "```");
+    if (p.warnings) out.push("", `Warning shown with it: unfilled placeholder(s) ${p.warnings}. Sending as is would send them literally.`);
   }
   const tools = r.trace.filter((s) => s.label !== "reasoning" || s.kind !== "model_reasoning").map((s) => `${s.step}. [${s.label}] ${s.kind}: ${s.summary.split("\n")[0].slice(0, 160)}`);
   out.push("", "<details><summary>Trace (labelled steps)</summary>", "", "```text", ...tools, "```", "", "</details>");

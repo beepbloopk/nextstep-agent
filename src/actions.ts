@@ -26,6 +26,14 @@ export function idempotencyKey(sid: string, actionType: string, cHash: string): 
   return createHash("sha256").update(`${sid}|${actionType}|${cHash}`).digest("hex").slice(0, 32);
 }
 
+/**
+ * Unfilled template slots like "[Your Name]", "{{date}}" or "<Manager name>". A live run produced
+ * a manager/HR email ending in "[Your Name]": exactly what an auto-send would have sent.
+ */
+export function findPlaceholders(text: string): string[] {
+  return [...new Set(text.match(/\[[A-Z][^\]\n]{1,30}\]|\{\{[^}\n]{1,30}\}\}|<[A-Z][^>\n]{1,30}>/g) ?? [])];
+}
+
 export function renderExactText(m: OutgoingMessage): string {
   const lines = [`To: ${m.recipient} (${m.channel})`];
   if (m.subject) lines.push(`Subject: ${m.subject}`);
@@ -91,7 +99,7 @@ export class ActionManager {
     const exactText = renderExactText(msg);
     this.store.append(sid, "action_proposed", {
       ref: actionId,
-      meta: { tool: "sendMessage", idempotencyKey: key, contentHash: cHash, situationVersion: currentVersion(this.store, sid), draftId },
+      meta: { tool: "sendMessage", idempotencyKey: key, contentHash: cHash, situationVersion: currentVersion(this.store, sid), draftId, warnings: findPlaceholders(exactText).join(", ") || null },
       data: { exactText, recipient: msg.recipient, message: msg },
     });
     const action = this.get(sid, actionId)!;
@@ -99,6 +107,7 @@ export class ActionManager {
       actionId,
       idempotencyKey: key,
       exactText,
+      warnings: findPlaceholders(exactText),
     });
     return { status: "proposed", action };
   }
@@ -118,6 +127,24 @@ export class ActionManager {
     const v = currentVersion(this.store, sid);
     this.store.append(sid, "action_confirmed", { ref: actionId, meta: { situationVersion: v, idempotencyKey: a.idempotencyKey } });
     trace?.add("confirmed", "use_tools", "user_confirmed_exact_text", `User confirmed the exact text of ${actionId} at situation version ${v}.`, { actionId, situationVersion: v });
+    return { ok: true };
+  }
+
+  /**
+   * One confirmation for several sends (curveball: fewer prompts). Still exact-text: every item
+   * is checked byte for byte against its own proposal, and one mismatch confirms nothing.
+   */
+  confirmMany(sid: string, shown: { actionId: string; shownText: string }[], trace?: Trace): { ok: boolean; error?: string } {
+    for (const s of shown) {
+      const a = this.get(sid, s.actionId);
+      if (!a || !["proposed", "halted"].includes(a.status) || a.exactText !== s.shownText) {
+        return { ok: false, error: `batch rejected: ${s.actionId} does not match what was proposed; nothing was confirmed` };
+      }
+    }
+    for (const s of shown) {
+      const r = this.confirm(sid, s.actionId, s.shownText, trace);
+      if (!r.ok) return r;
+    }
     return { ok: true };
   }
 

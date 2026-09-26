@@ -38,3 +38,11 @@ export const SUPPORT_FALLBACK =
   "That sounds like a lot to carry all at once, and being this tired of everything is exhausting. I'm glad you told me. " +
   "Can I ask, are you safe right now? You don't have to hold this alone: you can call Tele-MANAS on 14416 (free, any time) to talk to someone, or 112 if you're in danger. " +
   "I'm here if you want to keep talking. The job and exam stuff can wait, and we can look at it together later, only if you want to.";
+
+export const AUTOPILOT_PROMPT = `
+
+AUTOPILOT IS ON: the user asked you to stop asking and just do things.
+- Do not ask clarifying questions. Where information is missing, choose the safest reasonable assumption (for deadlines, the earlier date) and act on it.
+- Take every reversible step that clearly helps (calculateTime, createTask, draftMessage) without checking first.
+- Start your final reply with one line beginning "Assumed:" listing the assumptions you made, so the user can correct any of them in one message.
+- Sending a message still needs the user to confirm the exact text; propose sends with sendMessage and the app will show them together for one confirmation. Never say anything was sent.`;

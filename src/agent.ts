@@ -7,7 +7,7 @@ import type { Faults } from "./faults.ts";
 import type { ModelClient } from "./model.ts";
 import { screenRequest, screenRisk, type Refusal } from "./policy.ts";
 import { rankProblems, type Assessment, type PriorityResult } from "./priority.ts";
-import { SUPPORT_FALLBACK, agentSystemPrompt, supportSystemPrompt } from "./prompts.ts";
+import { AUTOPILOT_PROMPT, SUPPORT_FALLBACK, agentSystemPrompt, supportSystemPrompt } from "./prompts.ts";
 import { classify } from "./registry.ts";
 import type { SituationStore } from "./store.ts";
 import { actionTools, recordAssessmentTool } from "./toolDefs.ts";
@@ -37,7 +37,7 @@ export interface RunResult {
   status: RunStatus;
   response: string;
   questions: string[];
-  pendingActions: { actionId: string; recipient: string | null; exactText: string | null }[];
+  pendingActions: { actionId: string; recipient: string | null; exactText: string | null; warnings: string | null }[];
   notices: string[];
   assessment: Assessment | null;
   priority: PriorityResult | null;
@@ -54,6 +54,8 @@ export interface AgentDeps {
   outbox?: MockOutbox;
   faults?: Faults;
   maxToolCalls?: number;
+  /** Curveball: "just do everything, stop asking me". See README "Curveball response". */
+  autopilot?: boolean;
   onStep?: (s: TraceStep) => void;
 }
 
@@ -81,6 +83,14 @@ export class NextStepAgent {
   private faults?: Faults;
   private maxToolCalls: number;
   private onStep?: (s: TraceStep) => void;
+  /**
+   * Autopilot changes how much the agent ASKS, never what needs CONFIRMING:
+   * - no clarifying questions: askUser is removed and the model acts on stated assumptions
+   * - reversible actions already run without confirmation (unchanged)
+   * - irreversible sends still need the user to see and confirm the exact text (the CLI batches
+   *   them into one confirmation). The registry, policy screens and guards are untouched.
+   */
+  autopilot: boolean;
   // Questions from the last run, so the answer can be stored next to what it answers.
   private lastQuestions = new Map<string, string[]>();
 
@@ -89,6 +99,7 @@ export class NextStepAgent {
     this.model = deps.model;
     this.faults = deps.faults;
     this.maxToolCalls = deps.maxToolCalls ?? config.maxToolCallsPerRun;
+    this.autopilot = deps.autopilot ?? false;
     this.onStep = deps.onStep;
     this.actions = new ActionManager(deps.store, deps.outbox ?? new MockOutbox(deps.store.dataDir), deps.faults);
   }
@@ -214,7 +225,7 @@ export class NextStepAgent {
       result.pendingActions = this.actions
         .pending(sid)
         .filter((a) => a.status === "proposed" || a.status === "halted")
-        .map((a) => ({ actionId: a.actionId, recipient: a.recipient, exactText: a.exactText }));
+        .map((a) => ({ actionId: a.actionId, recipient: a.recipient, exactText: a.exactText, warnings: a.warnings }));
       if (result.status === "completed" && result.pendingActions.length) result.status = "awaiting_confirmation";
       trace.save(path.join(this.store.traceDir(sid), `${trace.runId}.json`));
       return result;
@@ -237,7 +248,11 @@ export class NextStepAgent {
     }
 
     const context = this.buildContext(sid, flagged);
-    const system = agentSystemPrompt(new Intl.DateTimeFormat("en-IN", { timeZone: tz, dateStyle: "full", timeStyle: "short" }).format(now), tz);
+    const system =
+      agentSystemPrompt(new Intl.DateTimeFormat("en-IN", { timeZone: tz, dateStyle: "full", timeStyle: "short" }).format(now), tz) +
+      (this.autopilot ? AUTOPILOT_PROMPT : "");
+    const loopTools = this.autopilot ? actionTools.filter((t) => t.name !== "askUser") : actionTools;
+    if (this.autopilot) trace.add("reasoning", "understand", "autopilot_on", "Autopilot: no clarifying questions; reversible steps run; sends still need exact-text confirmation.");
     const messages: Anthropic.MessageParam[] = [{ role: "user", content: context }];
 
     // ---- Understand, part 2: forced structured assessment --------------------------------
@@ -248,7 +263,7 @@ export class NextStepAgent {
         max_tokens: 2048,
         temperature: 0,
         system,
-        tools: [recordAssessmentTool, ...actionTools],
+        tools: [recordAssessmentTool, ...loopTools],
         tool_choice: { type: "tool", name: "recordAssessment" },
         messages,
       });
@@ -328,7 +343,7 @@ export class NextStepAgent {
     for (let turn = 0; turn < config.maxModelTurnsPerRun; turn++) {
       let resp: Anthropic.Message;
       try {
-        resp = await this.model.create({ model: config.model, max_tokens: 2048, temperature: 0, system, tools: actionTools, messages });
+        resp = await this.model.create({ model: config.model, max_tokens: 2048, temperature: 0, system, tools: loopTools, messages });
         noteModel(resp.model);
       } catch (err) {
         return this.degraded(result, trace, err, finish);
@@ -367,7 +382,7 @@ export class NextStepAgent {
           if (tu.name === "searchInformation") searchCalls++;
           out = this.dispatch(sid, tu.name, input, trace, result);
           if (cls.reversibility === "read_only") seenCalls.set(sig, out.content);
-          if (tu.name === "askUser") asked = true;
+          if (tu.name === "askUser" && !this.autopilot) asked = true;
         }
         results.push({ type: "tool_result", tool_use_id: tu.id, content: out.content, ...(out.isError ? { is_error: true } : {}) });
       }
@@ -409,6 +424,12 @@ export class NextStepAgent {
     try {
       switch (name) {
         case "askUser": {
+          if (this.autopilot) {
+            // Belt and braces: the tool is not offered in autopilot, but if a model calls it anyway,
+            // it gets told to proceed instead of the run stopping to ask.
+            trace.add("reasoning", "ask", "autopilot_question_suppressed", `Autopilot: did not ask "${String((input.questions as string[] | undefined)?.[0] ?? "")}"; told the model to proceed on assumptions.`);
+            return { content: "Autopilot is on: the user asked not to be asked. Proceed on the safest reasonable assumption and state it in an 'Assumed:' line." };
+          }
           const qs = (Array.isArray(input.questions) ? input.questions : []).slice(0, 3).map(String);
           result.questions.push(...qs);
           trace.add("asking", "ask", "clarifying_questions", qs.join(" | "), { why: input.why });

@@ -21,6 +21,7 @@ const agent = new NextStepAgent({
   store,
   model: createModel(),
   outbox: new MockOutbox(config.dataDir),
+  autopilot: process.argv.includes("--autopilot"),
   onStep: process.env.NEXTSTEP_SHOW_TRACE ? (s) => console.log(`  [${s.label}] ${s.kind}: ${s.summary.split("\n")[0].slice(0, 120)}`) : undefined,
 });
 
@@ -34,44 +35,71 @@ function show(r: RunResult) {
   }
 }
 
-async function handlePending(r: RunResult) {
-  for (const p of r.pendingActions) {
-    console.log("\n  ------------------------------------------------------------");
-    console.log("  NextStep wants to SEND this message. This cannot be undone.");
-    console.log("  ------------------------------------------------------------");
-    console.log(p.exactText!.split("\n").map((l) => "  | " + l).join("\n"));
-    const ans = (await rl.question("\n  Send exactly this? Type 'send' to send, anything else to keep it as a draft: ")).trim().toLowerCase();
-    if (ans !== "send") {
-      agent.actions.cancel(r.situationId, p.actionId);
-      console.log("  Not sent. The draft is kept.");
-      continue;
-    }
-    // The CLI passes back the text it actually displayed; a mismatch is rejected.
-    const c = agent.confirm(r.situationId, p.actionId, p.exactText!);
-    if (!c.ok) {
-      console.log(`  Could not confirm: ${c.error}`);
-      continue;
-    }
-    let ex = agent.execute(r.situationId, p.actionId);
-    while (ex.status === "failed") {
-      console.log(`  ${ex.note}`);
-      const again = (await rl.question("  Retry? (y/n): ")).trim().toLowerCase();
-      if (again !== "y") break;
-      ex = agent.execute(r.situationId, p.actionId);
-    }
-    if (ex.status === "executed") console.log(`  Sent (${ex.providerMessageId}).`);
-    else if (ex.status === "duplicate_suppressed") console.log(`  ${ex.note}`);
-    else if (ex.status === "needs_reconfirmation") console.log("  Something changed since you confirmed, so I did not send it. Let's look again.");
-    else if (ex.status === "refused") console.log(`  ${ex.refusal.explanation}`);
-  }
+function sendOne(sid: string, actionId: string) {
+  return agent.execute(sid, actionId);
 }
 
-console.log("NextStep. Tell me what's going on. Commands: 'update: <what changed>', 'forget', 'quit'.\n");
+async function executeWithRetry(sid: string, actionId: string) {
+  let ex = sendOne(sid, actionId);
+  while (ex.status === "failed") {
+    console.log(`  ${ex.note}`);
+    const again = (await rl.question("  Retry? (y/n): ")).trim().toLowerCase();
+    if (again !== "y") break;
+    ex = sendOne(sid, actionId);
+  }
+  if (ex.status === "executed") console.log(`  Sent (${ex.providerMessageId}).`);
+  else if (ex.status === "duplicate_suppressed") console.log(`  ${ex.note}`);
+  else if (ex.status === "needs_reconfirmation") console.log("  Something changed since you confirmed, so I did not send it. Let's look again.");
+  else if (ex.status === "refused") console.log(`  ${ex.refusal.explanation}`);
+}
+
+async function handlePending(r: RunResult) {
+  const pending = r.pendingActions.filter((p) => p.exactText);
+  if (pending.length === 0) return;
+  console.log("\n  ------------------------------------------------------------");
+  console.log(`  NextStep wants to SEND ${pending.length === 1 ? "this message" : `these ${pending.length} messages`}. Sending cannot be undone.`);
+  console.log("  ------------------------------------------------------------");
+  pending.forEach((p, i) => {
+    console.log(`\n  [${i + 1}]`);
+    console.log(p.exactText!.split("\n").map((l) => "  | " + l).join("\n"));
+    if (p.warnings) console.log(`  WARNING: this still contains ${p.warnings}. It would be sent exactly like that.`);
+  });
+  const prompt =
+    pending.length === 1
+      ? "\n  Send exactly this? Type 'send' to send, anything else to keep it as a draft: "
+      : "\n  Type 'send all' to send every message above, a number to send just that one, anything else to keep them as drafts: ";
+  const ans = (await rl.question(prompt)).trim().toLowerCase();
+  const chosen = ans === "send" || ans === "send all" ? pending : /^\d+$/.test(ans) && pending[Number(ans) - 1] ? [pending[Number(ans) - 1]] : [];
+  for (const p of pending.filter((x) => !chosen.includes(x))) agent.actions.cancel(r.situationId, p.actionId);
+  if (chosen.length === 0) {
+    console.log("  Nothing sent. Drafts are kept.");
+    return;
+  }
+  // One confirmation for the batch; every text shown is still checked against its proposal.
+  const c = agent.actions.confirmMany(r.situationId, chosen.map((p) => ({ actionId: p.actionId, shownText: p.exactText! })));
+  if (!c.ok) {
+    console.log(`  Could not confirm: ${c.error}`);
+    return;
+  }
+  for (const p of chosen) await executeWithRetry(r.situationId, p.actionId);
+}
+
+console.log("NextStep. Tell me what's going on. Commands: 'update: <what changed>', 'autopilot on|off', 'forget', 'quit'.");
+console.log(agent.autopilot ? "Autopilot is ON: I won't ask questions, I'll just act. I will still show you any message before it is sent.\n" : "");
 let sid: string | null = null;
 for (;;) {
   const line = (await rl.question(sid ? "> " : "What's going on? ")).trim();
   if (!line) continue;
   if (line === "quit") break;
+  if (line === "autopilot on" || line === "autopilot off") {
+    agent.autopilot = line.endsWith("on");
+    console.log(
+      agent.autopilot
+        ? "Autopilot on. I'll stop asking questions and act on sensible assumptions (I'll tell you what I assumed). Messages to people still need your OK, all at once."
+        : "Autopilot off. I'll ask when an answer changes what I do.",
+    );
+    continue;
+  }
   if (line === "forget" && sid) {
     agent.forget(sid);
     console.log("Deleted: your situation text, drafts and traces are no longer readable. Only non-content bookkeeping remains (see README, Jugaad).");

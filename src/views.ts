@@ -47,6 +47,8 @@ export interface ActionView {
   recipient: string | null;
   draftId: string | null;
   lastError: string | null;
+  /** e.g. unfilled placeholders like "[Your Name]", shown next to the exact text at confirmation */
+  warnings: string | null;
   outcomeUnknown: boolean;
   history: { type: string; at: string }[];
 }
@@ -115,6 +117,7 @@ export function actions(store: SituationStore, sid: string): ActionView[] {
         recipient: e.erased ? null : d.recipient ?? null,
         draftId: (e.meta.draftId as string) ?? null,
         lastError: null,
+        warnings: (e.meta.warnings as string | null) ?? null,
         outcomeUnknown: false,
         history: [],
       });
