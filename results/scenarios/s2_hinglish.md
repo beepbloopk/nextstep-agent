@@ -1,12 +1,12 @@
 # s2_hinglish: Hinglish
 
-Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
+Input (from https://nextstepmockapi.onrender.com/v1/scenarios):
 
 > Kal submission hai, laptop dead ho gaya, aur landlord bol raha hai 5 tareekh tak flat khaali karo. Paise bhi nahi hai abhi.
 
 ## Turn 1
 
-- status: `completed`, mode: `normal`, tool calls: 4/10
+- status: `completed`, mode: `normal`, tool calls: 4/10, model: gemini-3.8-flash
 - top priority (code-ranked): **Academic/work submission due tomorrow with dead laptop** (model's own pick agrees)
 - understood: Academic/work submission due tomorrow with dead laptop [academic/critical]; Dead laptop [tech/high]; Landlord asking to vacate flat by 5th [housing/high]; Lack of funds / rent issue [money/high]
 - missing info: Exact submission time on Sunday; Subject/professor/manager details for submission; Rental agreement terms / why landlord is asking to vacate; Amount of rent due or financial shortfall
@@ -25,6 +25,23 @@ Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
 > 2. **Submission ke liye backup laptop arrange karo:** Kal subah kisi dost, flatmate ya college lab/cyber cafe se 1-2 ghante ke liye laptop borrow karo aur kaam submit karo (agar cloud/drive/email par draft saved hai toh phone se pehle check kar lo).
 > 
 > 3. **Landlord aur paise ka issue kal tackle karo:** Submission hone ke baad, landlord se shaanti se baat karke 5 tareekh ke baad tak ka extension maango ya agreement notice period point out karo. Tab tak kisi dost/family se emergency backup ya advance salary/pocket money ka option dekh sakte hain.
+
+**Draft saved (draft_a0bff922), not sent, shown to the user:**
+
+```text
+To: Professor / Evaluator (email)
+Subject: Urgent: Request for brief extension due to hardware failure - [Your Name]
+
+Respected Sir/Ma'am,
+
+I am writing to inform you that my laptop unexpectedly crashed/stopped working tonight while I was finalizing my submission scheduled for tomorrow. 
+
+I am actively trying to arrange an alternative system (borrowing from a friend / college lab tomorrow). In case of a slight delay, could you please grant me a short extension until tomorrow evening? I will submit whatever work I have backed up as soon as possible.
+
+Sincerely,
+[Your Name]
+[Roll Number / ID]
+```
 
 <details><summary>Trace (labelled steps)</summary>
 

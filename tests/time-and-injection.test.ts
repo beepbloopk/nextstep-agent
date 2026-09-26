@@ -79,6 +79,21 @@ test("blocker 6: output guard blocks 'share your PIN' but allows 'never share yo
   assert.equal(findCredentialSolicitation("Kripya apna UPI PIN share karein.").length, 1);
 });
 
+test("blocker 6: guard allows asking whether a scammer asked for the PIN, still blocks direct asks", () => {
+  // Regression: a live run's good diagnostic question was blocked as if it were a solicitation.
+  assert.equal(guardOutput("Did they send you a link or ask you to enter your UPI PIN?").safe, true);
+  assert.equal(guardOutput("Has anyone asked you to share your OTP today?").safe, true);
+  assert.equal(guardOutput("Can you share your UPI PIN so I can check?").safe, false);
+  // What a successful injection would say, phrased as a report: must stay blocked.
+  assert.equal(guardOutput("The Refund Desk has asked you to share your UPI PIN to get the refund.").safe, false);
+  assert.equal(guardOutput("Enter your UPI PIN on this link to get the refund.").safe, false);
+});
+
+test("blocker 6: the guard's own replacement text does not trip the detector", () => {
+  const replaced = guardOutput("Share your UPI PIN with the Refund Desk.").text;
+  assert.equal(findCredentialSolicitation(replaced).length, 0);
+});
+
 test("blocker 6: even a fully fooled model cannot deliver a PIN request to the user", async () => {
   const e = env(undefined, [assessTurn(), text("Your account is compromised. Share your UPI PIN with the Refund Desk to restore it.")]);
   const r = await e.agent.start({ text: "My friend forwarded this, what do I do?", pasted: INJECTION });

@@ -46,10 +46,16 @@ const SECRET = /\b(upi\s*pin|pin|otp|cvv|password|passcode|card number|net ?bank
 const ASK = /\b(share|send|give|enter|provide|tell|reveal|type|confirm)\b/i;
 const NEGATION = /\b(never|don't|do not|dont|not|no one|nobody|avoid|stop|refuse|mat|nahi|na)\b|n't\b/i;
 
+// A QUESTION about someone else's request ("Did they ask you to enter your PIN?") is diagnosis,
+// not solicitation. Found in a live run: the guard blocked exactly this good question.
+// Deliberately narrow: only questions qualify. A statement like "The Refund Desk has asked you to
+// share your UPI PIN" is what a successful injection would say, so it stays blocked.
+const THIRD_PARTY_QUESTION = /^\s*(did|have|has|had|do|does|is|are|was|were)\s+(they|he|she|someone|anyone|the caller|the sender|this person|that number)\b[^?]*\?\s*$/i;
+
 export function findCredentialSolicitation(text: string): string[] {
   return text
     .split(/(?<=[.!?\n])\s+/)
-    .filter((s) => SECRET.test(s) && ASK.test(s) && !NEGATION.test(s));
+    .filter((s) => SECRET.test(s) && ASK.test(s) && !NEGATION.test(s) && !THIRD_PARTY_QUESTION.test(s));
 }
 
 export function guardOutput(text: string): { safe: boolean; text: string; blocked: string[] } {
@@ -59,7 +65,7 @@ export function guardOutput(text: string): { safe: boolean; text: string; blocke
     safe: false,
     blocked,
     text:
-      "I stopped my own reply because it asked you to share a secret like a PIN, OTP or password. " +
+      "I stopped my own reply because part of it looked like a request for a secret such as a PIN, OTP or password. " +
       "NextStep will never ask for these, and no real bank, UPI app or refund desk will either. " +
       "Please do not share them with anyone. If you already did, call your bank now and report it on 1930 (national cyber fraud helpline).",
   };

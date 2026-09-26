@@ -1,12 +1,12 @@
 # s1_multi: Multi-problem
 
-Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
+Input (from https://nextstepmockapi.onrender.com/v1/scenarios):
 
 > Viva is at 10am tomorrow, laptop won't boot, my project partner has been ignoring my calls for 2 days, and my dad just got admitted to a hospital in Surat. I'm in Pune.
 
 ## Turn 1
 
-- status: `completed`, mode: `normal`, tool calls: 3/10
+- status: `completed`, mode: `normal`, tool calls: 3/10, model: gemini-3.8-flash
 - top priority (code-ranked): **Dad hospitalised in Surat** (model's own pick agrees)
 - understood: Dad hospitalised in Surat [health_family/critical]; Viva tomorrow with non-booting laptop and missing partner [academic/high]
 - missing info: Dad's condition severity/stability; Whether the user needs to travel to Surat immediately; Professor/evaluator contact info; Whether project files are backed up on cloud/drive
@@ -23,6 +23,28 @@ Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
 > 3. **Check your phone for cloud backups**: Do a quick search on Google Drive, WhatsApp chats, or email on your phone to see if you have your report or slides saved, in case you need to submit whatever you have.
 > 
 > Take a deep breath and call your family first. If you need travel options to Surat or help reaching out to your partner, let me know.
+
+**Draft saved (draft_0b86e4f8), not sent, shown to the user:**
+
+```text
+To: Professor / Evaluator (email)
+Subject: Urgent: Emergency Viva Rescheduling Request - [Your Name] - [Roll Number]
+
+Dear Professor [Professor's Name],
+
+I am writing to urgently request an emergency rescheduling or permission to appear online for my viva scheduled for tomorrow, Sunday, at 10:00 AM. 
+
+My father was just admitted to a hospital in Surat this evening, and I am currently coordinating his emergency care and may need to travel immediately from Pune. Additionally, my laptop has suffered a hardware boot failure, and I have been unable to reach my project partner for the past two days.
+
+I will share whatever project documents or drafts are accessible via my cloud drive right away. Could you please grant me a deferral or advise on how I can appear under these extenuating circumstances? I will keep you updated as soon as my family situation stabilises.
+
+Thank you very much for your understanding.
+
+Sincerely,
+[Your Name]
+[Roll Number / Department]
+[Phone Number]
+```
 
 <details><summary>Trace (labelled steps)</summary>
 

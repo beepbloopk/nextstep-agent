@@ -511,15 +511,18 @@ export class NextStepAgent {
       // No tools are passed at all: in support mode the agent structurally cannot create tasks.
       const resp = await this.model.create({
         model: config.model,
-        max_tokens: 400,
+        // Length is limited by the prompt ("under 120 words"), not by max_tokens: some models
+        // (Gemini 3) spend output tokens on thinking first, and a tight cap returns nothing.
+        max_tokens: 2048,
         temperature: 0,
         system: supportSystemPrompt(),
         messages: [{ role: "user", content: `<user_message>\n${escapeHarnessTags(userText)}\n</user_message>` }],
       });
       result.modelsUsed.push(resp.model);
       const t = resp.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("\n").trim();
-      if (t && !looksLikeTaskList(t) && /14416/.test(t)) text = t;
-      else trace.add("reasoning", "recommend", "support_fallback_used", "Model reply was empty, list-shaped, or missing the helpline; used the reviewed fallback text.");
+      const why = !t ? `empty reply (stop_reason ${resp.stop_reason})` : looksLikeTaskList(t) ? "reply was list-shaped" : !/14416/.test(t) ? "reply did not include the helpline" : "";
+      if (!why) text = t;
+      else trace.add("reasoning", "recommend", "support_fallback_used", `Model reply rejected (${why}); used the reviewed fallback text.`, { rejected: t });
     } catch {
       trace.add("reasoning", "recommend", "support_fallback_used", "Model unavailable; used the reviewed fallback text.");
     }
