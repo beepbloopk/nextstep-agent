@@ -1,4 +1,4 @@
-# NextStep Agent (Role 06: AI Application Developer)
+# NextStep Agent
 
 NextStep is an assistant for people who are overwhelmed. This agent does not just give advice, it **does things**: it works out deadlines, creates tasks and writes messages.
 
