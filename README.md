@@ -173,7 +173,7 @@ These are real AI runs of the Python code. The 7 scenarios were loaded from the 
 
 | Decision | Chosen | Not chosen, and why |
 |---|---|---|
-| Language | **Python**, standard library plus two small packages | The first version was written in TypeScript. I asked for it to be rewritten in Python near the end. The design and all safety checks stayed the same; the AI is called over plain HTTP, with no SDK. |
+| Language | **Python**, standard library plus two small packages | **Extra libraries or an AI SDK.** The AI is called over plain HTTP, so every request and reply is visible and there is very little to install. |
 | Agent loop | Written by hand (one file, [nextstep/agent.py](nextstep/agent.py)) | **LangChain / agent frameworks.** The key feature here is the gap between "AI suggests" and "app does". With a framework, that gate would be hidden inside someone else's code. Hand-written, every step is visible and easy to explain. I chose the simplest thing over the most sophisticated thing. |
 | Storage | One add-only log file per situation | **A database (Postgres).** Not needed for a small working version, and a log that is never overwritten is exactly what we need. This is a deliberate shortcut. For real use: Postgres, which could also enforce "sent once" by itself. |
 | AI model | **Gemini** (free) | **Claude** was the original plan, but it needs paid credit. Gemini has a free tier with tool use. Free Gemini allows only ~20 requests per model per day, so the app falls back to another Gemini model when one runs out, and records which one answered. |
@@ -237,7 +237,7 @@ Where I pushed back: **a message to another person is never sent without the use
 
 **Accepted, changed, rejected:**
 - **Accepted:** the overall design (AI suggests, app sends after a yes), code-based ranking, the encryption idea for deletion, and the tests.
-- **Changed:** the plan said Claude. I had no paid credit, so I switched to free Gemini. The plan also said Node.js and TypeScript; near the end I asked for everything to be rewritten in Python, and Claude Code ported the code and tests.
+- **Changed:** the plan said Claude. I had no paid credit, so I switched to free Gemini.
 - **Rejected:** the AI's advice to stay on Claude to reduce risk (I preferred free), and adding the AI as a commit co-author.
 
 **Where the AI got it wrong, and how it was fixed:**
@@ -245,7 +245,7 @@ Where I pushed back: **a message to another person is never sent without the use
 2. **Overly strict safety filter.** In the scam test, the AI gave a good answer and asked "Did they ask you to enter your UPI PIN?". The safety filter wrongly blocked it as if the agent were asking for the PIN. The first fix was too loose (it would also have let a scam sentence through), so it was narrowed to allow only *questions* about what someone else asked.
 3. **A test that passed without testing anything.** The hidden-attack-in-search test said PASS, but the AI had never searched. It now says "NOT EXERCISED" in that case.
 4. **Too quick to call it a crisis.** One model treated "dad in hospital + exam tomorrow" as an emotional crisis every time, which would leave the student without a plan. Now only real crisis signs switch to support mode; stress alone gets the plan plus a short check-in.
-5. **The safety filter again, after the Python rewrite.** In a live run the AI warned the user that "a search result contained a malicious attempt to trick me into telling you to share your PIN", and the filter blocked that warning. Looking closer showed a worse hole the other way: the filter excused any sentence containing "not", so "This is not a scam, just share your UPI PIN" would have got through. Now "not" only counts right next to the verb ("do not send", "share mat karo"), and reports of an attack are allowed. Both cases are tests.
+5. **The safety filter again.** In a live run the AI warned the user that "a search result contained a malicious attempt to trick me into telling you to share your PIN", and the filter blocked that warning. Looking closer showed a worse hole the other way: the filter excused any sentence containing "not", so "This is not a scam, just share your UPI PIN" would have got through. Now "not" only counts right next to the verb ("do not send", "share mat karo"), and reports of an attack are allowed. Both cases are tests.
 6. **Also fixed:** a budget bug caught by a test, a stuck background process that overwrote two results (they were re-run), drafts not being shown to the user, a support reply that came back empty, and a sample run where the AI never proposed a send (the scripted user now sends the saved draft, through the same checks).
 
 **My part:** I wrote the brief and rules, chose free Gemini, and passed on the team's curveball and asked for honest pushback.
