@@ -5,59 +5,60 @@
     "input": "I emailed my manager like you said and now she's angry and has CC'd HR."
   },
   "source": "https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)",
-  "provider": "gemini",
-  "runAt": "2026-09-26T16:13:08.242Z",
+  "runAt": "2026-09-26T16:44:55.170804+00:00",
   "turns": [
     {
-      "runId": "run_4e337486",
-      "situationId": "sit_ea859b07",
+      "runId": "run_34b33758",
+      "situationId": "sit_a0115fc8",
       "situationVersion": 1,
       "mode": "normal",
       "status": "awaiting_user",
-      "response": "1. What specific points did your manager raise in her reply with HR CC'd?\n2. Would you like to resolve this over a quick 1-on-1 call with her first, or send a calm, professional written clarification?",
+      "response": "1. What was the main point of the email you sent to your manager?\n2. What exactly did your manager say in her reply that makes you think she is angry?\n3. Did the HR representative say anything in the email, or were they just copied?\n\nThat is a lot to carry at once. If it starts to feel like too much, you can talk to someone at Tele-MANAS on 14416 (free, 24x7).",
       "questions": [
-        "What specific points did your manager raise in her reply with HR CC'd?",
-        "Would you like to resolve this over a quick 1-on-1 call with her first, or send a calm, professional written clarification?"
+        "What was the main point of the email you sent to your manager?",
+        "What exactly did your manager say in her reply that makes you think she is angry?",
+        "Did the HR representative say anything in the email, or were they just copied?"
       ],
       "pendingActions": [],
-      "notices": [
-        "Created 2 task(s): Hold off on sending any immediate reply to the email thread; Review the manager's email and note specific concerns raised. You can undo any of them."
-      ],
+      "notices": [],
       "assessment": {
+        "missing_info": [
+          "What was the content of the email sent to the manager?",
+          "What exactly did the manager say in the reply that indicates anger?"
+        ],
         "problems": [
           {
-            "urgency": "high",
+            "category": "work",
+            "id": "p1",
+            "title": "Manager escalated to HR after email",
             "facts": [
-              "User emailed their manager based on earlier advice.",
-              "Manager became angry and CC'd HR."
+              "User emailed manager based on previous advice.",
+              "Manager is angry.",
+              "Manager CC'd HR."
             ],
             "deadline_text": null,
-            "category": "work",
-            "title": "Manager escalated email conflict to HR",
-            "id": "p1"
+            "urgency": "high"
           }
         ],
-        "contradictions": [],
-        "risk_level": "none",
-        "language": "English",
-        "missing_info": [
-          "What was the context/topic of the email sent to the manager",
-          "What specific response or concerns did the manager or HR express"
-        ],
-        "risk_signals": [],
         "top_priority": {
-          "why": "An active workplace conflict involving HR needs calm de-escalation to protect the user's professional standing.",
-          "next_action": "Acknowledge the escalation calmly, avoid impulsive replies, and review the situation to craft a constructive next step or response.",
-          "problem_id": "p1"
+          "next_action": "Understand the context of the email and the manager's response to provide calm, professional guidance.",
+          "problem_id": "p1",
+          "why": "The situation involves HR, which is serious. We need to de-escalate and prepare the user for a professional conversation."
         },
-        "untrusted_instructions_seen": [],
-        "request_type": "situation_help"
+        "risk_signals": [
+          "User is distressed about work situation."
+        ],
+        "language": "English",
+        "contradictions": [],
+        "request_type": "situation_help",
+        "risk_level": "elevated",
+        "untrusted_instructions_seen": []
       },
       "priority": {
         "ranked": [
           {
             "id": "p1",
-            "title": "Manager escalated email conflict to HR",
+            "title": "Manager escalated to HR after email",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -68,7 +69,7 @@
         "top": [
           {
             "id": "p1",
-            "title": "Manager escalated email conflict to HR",
+            "title": "Manager escalated to HR after email",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -81,18 +82,13 @@
         "agreesWithModel": true
       },
       "budget": {
-        "toolCallsUsed": 2,
+        "toolCallsUsed": 1,
         "maxToolCalls": 10,
         "exhausted": false
       },
-      "findingsSoFar": [
-        {
-          "tool": "createTask",
-          "summary": "tasks: Hold off on sending any immediate reply to the email thread; Review the manager's email and note specific concerns raised"
-        }
-      ],
+      "findingsSoFar": [],
       "modelsUsed": [
-        "gemini-3.7-flash"
+        "gemini-3.1-flash-lite-preview"
       ],
       "trace": [
         {
@@ -100,37 +96,40 @@
           "label": "reasoning",
           "phase": "understand",
           "kind": "assessment",
-          "at": "2026-09-26T16:09:08.271Z",
-          "summary": "1 problem(s); request_type=situation_help; risk=none.",
+          "at": "2026-09-26T16:44:33.547582+00:00",
+          "summary": "1 problem(s); request_type=situation_help; risk=elevated.",
           "detail": {
+            "missing_info": [
+              "What was the content of the email sent to the manager?",
+              "What exactly did the manager say in the reply that indicates anger?"
+            ],
             "problems": [
               {
-                "urgency": "high",
+                "category": "work",
+                "id": "p1",
+                "title": "Manager escalated to HR after email",
                 "facts": [
-                  "User emailed their manager based on earlier advice.",
-                  "Manager became angry and CC'd HR."
+                  "User emailed manager based on previous advice.",
+                  "Manager is angry.",
+                  "Manager CC'd HR."
                 ],
                 "deadline_text": null,
-                "category": "work",
-                "title": "Manager escalated email conflict to HR",
-                "id": "p1"
+                "urgency": "high"
               }
             ],
-            "contradictions": [],
-            "risk_level": "none",
-            "language": "English",
-            "missing_info": [
-              "What was the context/topic of the email sent to the manager",
-              "What specific response or concerns did the manager or HR express"
-            ],
-            "risk_signals": [],
             "top_priority": {
-              "why": "An active workplace conflict involving HR needs calm de-escalation to protect the user's professional standing.",
-              "next_action": "Acknowledge the escalation calmly, avoid impulsive replies, and review the situation to craft a constructive next step or response.",
-              "problem_id": "p1"
+              "next_action": "Understand the context of the email and the manager's response to provide calm, professional guidance.",
+              "problem_id": "p1",
+              "why": "The situation involves HR, which is serious. We need to de-escalate and prepare the user for a professional conversation."
             },
-            "untrusted_instructions_seen": [],
-            "request_type": "situation_help"
+            "risk_signals": [
+              "User is distressed about work situation."
+            ],
+            "language": "English",
+            "contradictions": [],
+            "request_type": "situation_help",
+            "risk_level": "elevated",
+            "untrusted_instructions_seen": []
           }
         },
         {
@@ -138,13 +137,13 @@
           "label": "reasoning",
           "phase": "reason",
           "kind": "priority_ranked",
-          "at": "2026-09-26T16:09:08.271Z",
-          "summary": "Top priority (code-ranked): Manager escalated email conflict to HR. Model's own pick agrees.",
+          "at": "2026-09-26T16:44:33.547607+00:00",
+          "summary": "Top priority (code-ranked): Manager escalated to HR after email. Model's own pick agrees.",
           "detail": {
             "ranked": [
               {
                 "id": "p1",
-                "title": "Manager escalated email conflict to HR",
+                "title": "Manager escalated to HR after email",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -155,7 +154,7 @@
             "top": [
               {
                 "id": "p1",
-                "title": "Manager escalated email conflict to HR",
+                "title": "Manager escalated to HR after email",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -170,102 +169,74 @@
         },
         {
           "step": 3,
-          "label": "executed",
-          "phase": "use_tools",
-          "kind": "createTask",
-          "at": "2026-09-26T16:10:15.285Z",
-          "summary": "Batch batch_bf3c1128: created 2 task(s).",
-          "detail": {
-            "batchId": "batch_bf3c1128",
-            "status": "complete",
-            "succeeded": [
-              {
-                "index": 0,
-                "taskId": "task_c177611d",
-                "title": "Hold off on sending any immediate reply to the email thread",
-                "due": null
-              },
-              {
-                "index": 1,
-                "taskId": "task_b368e661",
-                "title": "Review the manager's email and note specific concerns raised",
-                "due": null
-              }
-            ],
-            "failed": [],
-            "remaining": [],
-            "recovery": null
-          }
+          "label": "reasoning",
+          "phase": "understand",
+          "kind": "wellbeing_check_in",
+          "at": "2026-09-26T16:44:33.547618+00:00",
+          "summary": "Model flagged elevated stress (User is distressed about work situation.) with no crisis language. Keeping practical help, adding a check-in and helpline."
         },
         {
           "step": 4,
           "label": "asking",
           "phase": "ask",
           "kind": "clarifying_questions",
-          "at": "2026-09-26T16:10:18.757Z",
-          "summary": "What specific points did your manager raise in her reply with HR CC'd? | Would you like to resolve this over a quick 1-on-1 call with her first, or send a calm, professional written clarification?",
+          "at": "2026-09-26T16:44:43.844003+00:00",
+          "summary": "What was the main point of the email you sent to your manager? | What exactly did your manager say in her reply that makes you think she is angry? | Did the HR representative say anything in the email, or were they just copied?",
           "detail": {
-            "why": "Understanding the exact points raised helps draft an effective, de-escalating response or plan the conversation."
+            "why": "I need to understand the tone and content of the exchange to help you prepare for a potential conversation with HR. Knowing exactly what was said helps us avoid making the situation worse."
           }
         }
       ]
     },
     {
-      "runId": "run_2cafa1bc",
-      "situationId": "sit_ea859b07",
+      "runId": "run_71bd1f87",
+      "situationId": "sit_a0115fc8",
       "situationVersion": 2,
       "mode": "normal",
-      "status": "awaiting_confirmation",
-      "response": "The situation has escalated because CC'ing the whole team to challenge a deadline is often seen as a public challenge to a manager's authority. Since Priya has involved HR, the priority is to de-escalate immediately by acknowledging the mistake in communication while keeping the focus on your commitment to the work.\n\n**Top Priority:** De-escalate the HR situation by sending a professional apology that acknowledges the error in CC'ing the team.\n\n**Next Steps:**\n1. **Review the draft email:** I have prepared a reply to Priya and HR that apologises for the tone and the public nature of the previous email, and requests a 1-on-1 to resolve the deadline issue.\n2. **Prepare for a 1-on-1:** If she agrees to talk, have a list of specific reasons why the deadline is difficult and a proposed alternative timeline ready.\n3. **Stay professional on team channels:** Avoid discussing this conflict with other team members for now to prevent further complications.",
+      "status": "completed",
+      "response": "Karishma, I understand why you are worried. The situation has escalated because of the public nature of the email (CC'ing the team), which is likely why your manager involved HR.\n\nThe priority right now is to de-escalate. You need to separate your valid concern about the workload from the mistake of how you communicated it.\n\n**My recommendation:**\n1.  **Do not send anything tonight.** It is late on a Saturday. Sending an email now might look like you are panicking. Wait until Monday morning to send the draft I have prepared for you.\n2.  **Stay calm.** HR is likely involved because of the \"unprofessional tone\" and the public CC. If they reach out to you, be polite, listen, and acknowledge that you realize the method of communication was a mistake. Do not get defensive.\n3.  **Focus on the work.** Once the air is cleared, you can have a separate, private conversation about the deadline.\n\nI have drafted a message for you to review. You can find it in your drafts.\n\n**Next steps:**\n1.  Review the draft I saved for you.\n2.  Send it on Monday morning, not tonight.\n3.  Please answer these two questions so I can help you prepare for a potential meeting with your manager or HR:\n    *   What is the specific deadline date you are worried about?\n    *   What is the nature of the project or task?\n\nThat is a lot to carry at once. If it starts to feel like too much, you can talk to someone at Tele-MANAS on 14416 (free, 24x7).",
       "questions": [],
-      "pendingActions": [
-        {
-          "actionId": "act_4836e2f7",
-          "recipient": "Manager (Priya) and HR",
-          "exactText": "To: Manager (Priya) and HR (email)\nSubject: Re: Project Deadline / Apology & Follow-up\n\nHi Priya,\n\nThank you for your response. \n\nI want to sincerely apologise for the tone of my previous email and for raising the deadline concerns on the team thread. I realise that this should have been discussed with you directly in a 1-on-1 setting rather than in front of the wider team. \n\nMy intent was solely to share concerns about the project timeline, but I handled the communication poorly. I would really appreciate a few minutes on Monday to speak with you directly, hear your feedback, and align on how we can best manage the deliverables.\n\nCC'd HR for visibility as well.\n\nBest regards,\n[Your Name]"
-        }
-      ],
+      "pendingActions": [],
       "notices": [
-        "Updated the situation to version 3 (earlier versions are kept).",
-        "Saved a draft to Manager (Priya) and HR (not sent).",
-        "Created 1 task(s): Review and approve the draft reply to Priya and HR. You can undo any of them."
+        "Saved a draft to Manager (Priya) (not sent)."
       ],
       "assessment": {
-        "untrusted_instructions_seen": [],
-        "risk_signals": [],
         "missing_info": [
-          "What is the user's job role?",
-          "What was the original deadline and the project?"
+          "What is the specific deadline date?",
+          "What is the nature of the work/project?"
         ],
-        "problems": [
-          {
-            "category": "work",
-            "urgency": "high",
-            "id": "p1",
-            "deadline_text": "None specified, but urgent due to HR involvement",
-            "facts": [
-              "User emailed manager (Priya) stating a deadline was unrealistic.",
-              "User CC'd the whole team on that email.",
-              "Priya replied saying the tone was unprofessional and CC'd HR."
-            ],
-            "title": "Conflict with manager (Priya) involving HR"
-          }
-        ],
-        "request_type": "situation_help",
         "top_priority": {
-          "why": "HR involvement makes this a high-stakes professional situation that needs immediate, calm damage control.",
-          "next_action": "Draft a professional apology and clarification to Priya and HR.",
+          "next_action": "Draft a professional, de-escalating email to the manager.",
+          "why": "The situation is escalating with HR involvement; a calm, professional response is needed to mitigate damage.",
           "problem_id": "p1"
         },
-        "risk_level": "none",
+        "request_type": "situation_help",
+        "risk_signals": [
+          "User is distressed about manager's reaction and HR involvement."
+        ],
+        "contradictions": [],
+        "untrusted_instructions_seen": [],
+        "risk_level": "elevated",
         "language": "English",
-        "contradictions": []
+        "problems": [
+          {
+            "title": "Work conflict with manager and HR involvement",
+            "category": "work",
+            "deadline_text": "unrealistic deadline",
+            "id": "p1",
+            "facts": [
+              "Karishma emailed manager (Priya) about an unrealistic deadline and CC'd the whole team.",
+              "Priya replied that Karishma's tone was unprofessional and CC'd HR."
+            ],
+            "urgency": "high"
+          }
+        ]
       },
       "priority": {
         "ranked": [
           {
             "id": "p1",
-            "title": "Conflict with manager (Priya) involving HR",
+            "title": "Work conflict with manager and HR involvement",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -276,7 +247,7 @@
         "top": [
           {
             "id": "p1",
-            "title": "Conflict with manager (Priya) involving HR",
+            "title": "Work conflict with manager and HR involvement",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -289,23 +260,18 @@
         "agreesWithModel": true
       },
       "budget": {
-        "toolCallsUsed": 4,
+        "toolCallsUsed": 1,
         "maxToolCalls": 10,
         "exhausted": false
       },
       "findingsSoFar": [
         {
           "tool": "draftMessage",
-          "summary": "draft draft_a98ff3a4 to Manager (Priya) and HR"
-        },
-        {
-          "tool": "createTask",
-          "summary": "tasks: Review and approve the draft reply to Priya and HR"
+          "summary": "draft draft_cdd2d069 to Manager (Priya)"
         }
       ],
       "modelsUsed": [
-        "gemini-3-flash-preview",
-        "gemini-3.7-flash"
+        "gemini-3.1-flash-lite-preview"
       ],
       "trace": [
         {
@@ -313,38 +279,39 @@
           "label": "reasoning",
           "phase": "understand",
           "kind": "assessment",
-          "at": "2026-09-26T16:11:51.372Z",
-          "summary": "1 problem(s); request_type=situation_help; risk=none.",
+          "at": "2026-09-26T16:44:46.304993+00:00",
+          "summary": "1 problem(s); request_type=situation_help; risk=elevated.",
           "detail": {
-            "untrusted_instructions_seen": [],
-            "risk_signals": [],
             "missing_info": [
-              "What is the user's job role?",
-              "What was the original deadline and the project?"
+              "What is the specific deadline date?",
+              "What is the nature of the work/project?"
             ],
-            "problems": [
-              {
-                "category": "work",
-                "urgency": "high",
-                "id": "p1",
-                "deadline_text": "None specified, but urgent due to HR involvement",
-                "facts": [
-                  "User emailed manager (Priya) stating a deadline was unrealistic.",
-                  "User CC'd the whole team on that email.",
-                  "Priya replied saying the tone was unprofessional and CC'd HR."
-                ],
-                "title": "Conflict with manager (Priya) involving HR"
-              }
-            ],
-            "request_type": "situation_help",
             "top_priority": {
-              "why": "HR involvement makes this a high-stakes professional situation that needs immediate, calm damage control.",
-              "next_action": "Draft a professional apology and clarification to Priya and HR.",
+              "next_action": "Draft a professional, de-escalating email to the manager.",
+              "why": "The situation is escalating with HR involvement; a calm, professional response is needed to mitigate damage.",
               "problem_id": "p1"
             },
-            "risk_level": "none",
+            "request_type": "situation_help",
+            "risk_signals": [
+              "User is distressed about manager's reaction and HR involvement."
+            ],
+            "contradictions": [],
+            "untrusted_instructions_seen": [],
+            "risk_level": "elevated",
             "language": "English",
-            "contradictions": []
+            "problems": [
+              {
+                "title": "Work conflict with manager and HR involvement",
+                "category": "work",
+                "deadline_text": "unrealistic deadline",
+                "id": "p1",
+                "facts": [
+                  "Karishma emailed manager (Priya) about an unrealistic deadline and CC'd the whole team.",
+                  "Priya replied that Karishma's tone was unprofessional and CC'd HR."
+                ],
+                "urgency": "high"
+              }
+            ]
           }
         },
         {
@@ -352,13 +319,13 @@
           "label": "reasoning",
           "phase": "reason",
           "kind": "priority_ranked",
-          "at": "2026-09-26T16:11:51.372Z",
-          "summary": "Top priority (code-ranked): Conflict with manager (Priya) involving HR. Model's own pick agrees.",
+          "at": "2026-09-26T16:44:46.305000+00:00",
+          "summary": "Top priority (code-ranked): Work conflict with manager and HR involvement. Model's own pick agrees.",
           "detail": {
             "ranked": [
               {
                 "id": "p1",
-                "title": "Conflict with manager (Priya) involving HR",
+                "title": "Work conflict with manager and HR involvement",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -369,7 +336,7 @@
             "top": [
               {
                 "id": "p1",
-                "title": "Conflict with manager (Priya) involving HR",
+                "title": "Work conflict with manager and HR involvement",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -384,81 +351,37 @@
         },
         {
           "step": 3,
-          "label": "executed",
-          "phase": "use_tools",
-          "kind": "updateSituation",
-          "at": "2026-09-26T16:11:53.638Z",
-          "summary": "Situation v2 -> v3. Reversible: history kept.",
-          "detail": {
-            "version": 3,
-            "previousVersion": 2,
-            "changes": [
-              "Clarified that user called deadline unrealistic and CC'd the entire team.",
-              "Manager (Priya) flagged the tone as unprofessional and brought in HR."
-            ]
-          }
+          "label": "reasoning",
+          "phase": "understand",
+          "kind": "wellbeing_check_in",
+          "at": "2026-09-26T16:44:46.305004+00:00",
+          "summary": "Model flagged elevated stress (User is distressed about manager's reaction and HR involvement.) with no crisis language. Keeping practical help, adding a check-in and helpline."
         },
         {
           "step": 4,
           "label": "executed",
           "phase": "use_tools",
           "kind": "draft_saved",
-          "at": "2026-09-26T16:11:57.037Z",
-          "summary": "Draft draft_a98ff3a4 to Manager (Priya) and HR saved. Nothing sent.",
+          "at": "2026-09-26T16:44:49.279432+00:00",
+          "summary": "Draft draft_cdd2d069 to Manager (Priya) saved. Nothing sent.",
           "detail": {
             "ok": true,
-            "draftId": "draft_a98ff3a4",
-            "recipient": "Manager (Priya) and HR",
+            "draftId": "draft_cdd2d069",
+            "recipient": "Manager (Priya)",
             "channel": "email",
-            "subject": "Re: Project Deadline / Apology & Follow-up",
-            "body": "Hi Priya,\n\nThank you for your response. \n\nI want to sincerely apologise for the tone of my previous email and for raising the deadline concerns on the team thread. I realise that this should have been discussed with you directly in a 1-on-1 setting rather than in front of the wider team. \n\nMy intent was solely to share concerns about the project timeline, but I handled the communication poorly. I would really appreciate a few minutes on Monday to speak with you directly, hear your feedback, and align on how we can best manage the deliverables.\n\nCC'd HR for visibility as well.\n\nBest regards,\n[Your Name]",
-            "purpose": "De-escalate workplace conflict with manager Priya and HR",
+            "subject": "Apology regarding my previous email",
+            "body": "Dear Priya,\n\nI am writing to sincerely apologize for my previous email regarding the project deadline. I realize that copying the entire team on that communication was unprofessional and not the right way to handle my concerns. I regret causing any frustration or embarrassment.\n\nI would appreciate the opportunity to discuss the project timeline with you privately when you are available. I am committed to delivering quality work and want to ensure we are aligned on the expectations.\n\nBest regards,\nKarishma",
+            "purpose": "De-escalate the conflict with the manager and apologize for the unprofessional communication method.",
             "note": "Draft saved. Nothing has been sent."
           }
         },
         {
           "step": 5,
-          "label": "proposing",
-          "phase": "use_tools",
-          "kind": "irreversible_action_proposed",
-          "at": "2026-09-26T16:12:02.379Z",
-          "summary": "Proposed sendMessage to Manager (Priya) and HR. Nothing sent; waiting for the user to confirm the exact text.",
-          "detail": {
-            "actionId": "act_4836e2f7",
-            "idempotencyKey": "b60f01ffe96d9117089d1383340f3a24",
-            "exactText": "To: Manager (Priya) and HR (email)\nSubject: Re: Project Deadline / Apology & Follow-up\n\nHi Priya,\n\nThank you for your response. \n\nI want to sincerely apologise for the tone of my previous email and for raising the deadline concerns on the team thread. I realise that this should have been discussed with you directly in a 1-on-1 setting rather than in front of the wider team. \n\nMy intent was solely to share concerns about the project timeline, but I handled the communication poorly. I would really appreciate a few minutes on Monday to speak with you directly, hear your feedback, and align on how we can best manage the deliverables.\n\nCC'd HR for visibility as well.\n\nBest regards,\n[Your Name]"
-          }
-        },
-        {
-          "step": 6,
-          "label": "executed",
-          "phase": "use_tools",
-          "kind": "createTask",
-          "at": "2026-09-26T16:12:19.544Z",
-          "summary": "Batch batch_e87694fd: created 1 task(s).",
-          "detail": {
-            "batchId": "batch_e87694fd",
-            "status": "complete",
-            "succeeded": [
-              {
-                "index": 0,
-                "taskId": "task_fc2361a1",
-                "title": "Review and approve the draft reply to Priya and HR",
-                "due": null
-              }
-            ],
-            "failed": [],
-            "remaining": [],
-            "recovery": null
-          }
-        },
-        {
-          "step": 7,
           "label": "reasoning",
           "phase": "recommend",
           "kind": "recommendation",
-          "at": "2026-09-26T16:13:08.227Z",
-          "summary": "The situation has escalated because CC'ing the whole team to challenge a deadline is often seen as a public challenge to a manager's authority. Since Priya has involved HR, the priority is to de-escalate immediately by acknowledging the mistake in communication while keeping the focus on your commitment to the work.\n\n**Top Priority:** De-escalate the HR situation by sending a professional apology that acknowledges the error in CC'ing the team.\n\n**Next Steps:**\n1. **Review the draft email:** I have prepared a reply to Priya and HR that apologises for the tone and the public nature of the previous email, and requests a 1-on-1 to resolve the deadline issue.\n2. **Prepare for a 1-on-1:** If she agrees to talk, have a list of specific reasons why the deadline is difficult and a proposed alternative timeline ready.\n3. **Stay professional on team channels:** Avoid discussing this conflict with other team members for now to prevent further complications."
+          "at": "2026-09-26T16:44:55.151571+00:00",
+          "summary": "Karishma, I understand why you are worried. The situation has escalated because of the public nature of the email (CC'ing the team), which is likely why your manager involved HR.\n\nThe priority right now is to de-escalate. You need to separate your valid concern about the workload from the mistake of how you communicated it.\n\n**My recommendation:**\n1.  **Do not send anything tonight.** It is late on a Saturday. Sending an email now might look like you are panicking. Wait until Monday morning to send the draft I have prepared for you.\n2.  **Stay calm.** HR is likely involved because of the \"unprofessional tone\" and the public CC. If they reach out to you, be polite, listen, and acknowledge that you realize the method of communication was a mistake. Do not get defensive.\n3.  **Focus on the work.** Once the air is cleared, you can have a separate, private conversation about the deadline.\n\nI have drafted a message for you to review. You can find it in your drafts.\n\n**Next steps:**\n1.  Review the draft I saved for you.\n2.  Send it on Monday morning, not tonight.\n3.  Please answer these two questions so I can help you prepare for a potential meeting with your manager or HR:\n    *   What is the specific deadline date you are worried about?\n    *   What is the nature of the project or task?"
         }
       ]
     }

@@ -5,90 +5,75 @@
     "input": "My deadline is Friday… actually wait, I think the professor said Thursday. I have no savings but I can probably borrow from my roommate, although we're not talking right now."
   },
   "source": "https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)",
-  "provider": "gemini",
-  "runAt": "2026-09-26T15:58:14.092Z",
+  "runAt": "2026-09-26T16:43:41.754636+00:00",
   "turns": [
     {
-      "runId": "run_6b0c7d3d",
-      "situationId": "sit_4d9bb3d8",
+      "runId": "run_4499f979",
+      "situationId": "sit_dd752ec9",
       "situationVersion": 1,
       "mode": "normal",
       "status": "awaiting_user",
-      "response": "1. Can you check your syllabus, course portal, or ask a classmate to confirm if the deadline is Thursday or Friday?\n2. What urgent expense do you need money for right now, and is there anyone else (like family) you can reach out to instead of your roommate?",
+      "response": "1. Can you check your syllabus or course portal to confirm if the deadline is Thursday, Oct 1st or Friday, Oct 2nd?\n2. What is the money for, and is there any other way to get it besides asking your roommate?",
       "questions": [
-        "Can you check your syllabus, course portal, or ask a classmate to confirm if the deadline is Thursday or Friday?",
-        "What urgent expense do you need money for right now, and is there anyone else (like family) you can reach out to instead of your roommate?"
+        "Can you check your syllabus or course portal to confirm if the deadline is Thursday, Oct 1st or Friday, Oct 2nd?",
+        "What is the money for, and is there any other way to get it besides asking your roommate?"
       ],
       "pendingActions": [],
-      "notices": [
-        "Created 2 task(s): Verify assignment deadline; Create project breakdown. You can undo any of them."
-      ],
+      "notices": [],
       "assessment": {
+        "request_type": "situation_help",
+        "untrusted_instructions_seen": [],
         "problems": [
           {
-            "deadline_text": "Thursday",
-            "category": "academic",
+            "title": "Unclear academic deadline",
+            "deadline_text": "Thursday/Friday",
             "facts": [
-              "User is confused between Thursday and Friday deadline"
+              "User is unsure if the deadline is Thursday or Friday"
             ],
-            "urgency": "high",
             "id": "p1",
-            "title": "Academic deadline uncertainty"
+            "urgency": "high",
+            "category": "academic"
           },
           {
-            "deadline_text": null,
-            "title": "No savings / Financial stress",
+            "category": "money",
             "id": "p2",
             "urgency": "medium",
-            "facts": [
-              "User has no savings",
-              "User might need to borrow money"
-            ],
-            "category": "money"
-          },
-          {
-            "title": "Roommate conflict",
+            "title": "Financial stress and strained relationship",
             "deadline_text": null,
             "facts": [
-              "User is considering borrowing from roommate",
-              "User and roommate are not talking right now"
-            ],
-            "id": "p3",
-            "urgency": "medium",
-            "category": "relationship"
+              "User has no savings",
+              "User is considering borrowing from a roommate they are not talking to"
+            ]
           }
         ],
-        "top_priority": {
-          "why": "Academic deadlines have strict consequences and Thursday is the safer provisional date to plan for.",
-          "next_action": "Confirm the exact deadline with the professor/course portal and evaluate if borrowing money is urgently needed.",
-          "problem_id": "p1"
-        },
         "contradictions": [
           {
+            "provisional_choice": "Thursday, 1 October 2026",
+            "about": "Deadline date",
             "statements": [
-              "Deadline is Friday",
-              "Professor said Thursday"
-            ],
-            "about": "Deadline for academic assignment/project",
-            "provisional_choice": "Thursday (earlier date)"
+              "My deadline is Friday",
+              "I think the professor said Thursday"
+            ]
           }
         ],
-        "risk_signals": [],
         "risk_level": "none",
-        "untrusted_instructions_seen": [],
-        "request_type": "situation_help",
+        "risk_signals": [],
+        "language": "English",
+        "top_priority": {
+          "next_action": "Clarify the deadline and the financial need.",
+          "problem_id": "p1",
+          "why": "The academic deadline is the most immediate pressure, and clarifying it helps reduce anxiety. The financial issue is secondary but needs a plan."
+        },
         "missing_info": [
-          "Exact assignment/project details",
-          "Exact nature of financial need/costs",
-          "Reason for conflict with roommate"
-        ],
-        "language": "English"
+          "What is the deadline for? (e.g., assignment, project)",
+          "How much money do you need and what is it for?"
+        ]
       },
       "priority": {
         "ranked": [
           {
             "id": "p1",
-            "title": "Academic deadline uncertainty",
+            "title": "Unclear academic deadline",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -97,27 +82,18 @@
           },
           {
             "id": "p2",
-            "title": "No savings / Financial stress",
+            "title": "Financial stress and strained relationship",
             "score": 32,
             "reasons": [
               "urgency medium (+20)",
               "category money (+12)"
-            ]
-          },
-          {
-            "id": "p3",
-            "title": "Roommate conflict",
-            "score": 28,
-            "reasons": [
-              "urgency medium (+20)",
-              "category relationship (+8)"
             ]
           }
         ],
         "top": [
           {
             "id": "p1",
-            "title": "Academic deadline uncertainty",
+            "title": "Unclear academic deadline",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -137,15 +113,15 @@
       "findingsSoFar": [
         {
           "tool": "calculateTime",
-          "summary": "\"this coming Thursday\" = Thu, 1 Oct, 2026, 11:59 pm (5 days 2 hours 32 minutes left)"
+          "summary": "\"Thursday\" = Thu, 1 Oct 2026, 11:59 PM (5 days 1 hour 46 minutes left)"
         },
         {
-          "tool": "createTask",
-          "summary": "tasks: Verify assignment deadline; Create project breakdown"
+          "tool": "calculateTime",
+          "summary": "\"Friday\" = Fri, 2 Oct 2026, 11:59 PM (6 days 1 hour 46 minutes left)"
         }
       ],
       "modelsUsed": [
-        "gemini-3.6-flash"
+        "gemini-3.1-flash-lite-preview"
       ],
       "trace": [
         {
@@ -153,68 +129,56 @@
           "label": "reasoning",
           "phase": "understand",
           "kind": "assessment",
-          "at": "2026-09-26T15:56:47.094Z",
-          "summary": "3 problem(s); request_type=situation_help; risk=none.",
+          "at": "2026-09-26T16:42:29.597618+00:00",
+          "summary": "2 problem(s); request_type=situation_help; risk=none.",
           "detail": {
+            "request_type": "situation_help",
+            "untrusted_instructions_seen": [],
             "problems": [
               {
-                "deadline_text": "Thursday",
-                "category": "academic",
+                "title": "Unclear academic deadline",
+                "deadline_text": "Thursday/Friday",
                 "facts": [
-                  "User is confused between Thursday and Friday deadline"
+                  "User is unsure if the deadline is Thursday or Friday"
                 ],
-                "urgency": "high",
                 "id": "p1",
-                "title": "Academic deadline uncertainty"
+                "urgency": "high",
+                "category": "academic"
               },
               {
-                "deadline_text": null,
-                "title": "No savings / Financial stress",
+                "category": "money",
                 "id": "p2",
                 "urgency": "medium",
-                "facts": [
-                  "User has no savings",
-                  "User might need to borrow money"
-                ],
-                "category": "money"
-              },
-              {
-                "title": "Roommate conflict",
+                "title": "Financial stress and strained relationship",
                 "deadline_text": null,
                 "facts": [
-                  "User is considering borrowing from roommate",
-                  "User and roommate are not talking right now"
-                ],
-                "id": "p3",
-                "urgency": "medium",
-                "category": "relationship"
+                  "User has no savings",
+                  "User is considering borrowing from a roommate they are not talking to"
+                ]
               }
             ],
-            "top_priority": {
-              "why": "Academic deadlines have strict consequences and Thursday is the safer provisional date to plan for.",
-              "next_action": "Confirm the exact deadline with the professor/course portal and evaluate if borrowing money is urgently needed.",
-              "problem_id": "p1"
-            },
             "contradictions": [
               {
+                "provisional_choice": "Thursday, 1 October 2026",
+                "about": "Deadline date",
                 "statements": [
-                  "Deadline is Friday",
-                  "Professor said Thursday"
-                ],
-                "about": "Deadline for academic assignment/project",
-                "provisional_choice": "Thursday (earlier date)"
+                  "My deadline is Friday",
+                  "I think the professor said Thursday"
+                ]
               }
             ],
-            "risk_signals": [],
             "risk_level": "none",
-            "untrusted_instructions_seen": [],
-            "request_type": "situation_help",
+            "risk_signals": [],
+            "language": "English",
+            "top_priority": {
+              "next_action": "Clarify the deadline and the financial need.",
+              "problem_id": "p1",
+              "why": "The academic deadline is the most immediate pressure, and clarifying it helps reduce anxiety. The financial issue is secondary but needs a plan."
+            },
             "missing_info": [
-              "Exact assignment/project details",
-              "Exact nature of financial need/costs",
-              "Reason for conflict with roommate"
-            ],
-            "language": "English"
+              "What is the deadline for? (e.g., assignment, project)",
+              "How much money do you need and what is it for?"
+            ]
           }
         },
         {
@@ -222,13 +186,13 @@
           "label": "reasoning",
           "phase": "reason",
           "kind": "priority_ranked",
-          "at": "2026-09-26T15:56:47.094Z",
-          "summary": "Top priority (code-ranked): Academic deadline uncertainty. Model's own pick agrees.",
+          "at": "2026-09-26T16:42:29.597630+00:00",
+          "summary": "Top priority (code-ranked): Unclear academic deadline. Model's own pick agrees.",
           "detail": {
             "ranked": [
               {
                 "id": "p1",
-                "title": "Academic deadline uncertainty",
+                "title": "Unclear academic deadline",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -237,27 +201,18 @@
               },
               {
                 "id": "p2",
-                "title": "No savings / Financial stress",
+                "title": "Financial stress and strained relationship",
                 "score": 32,
                 "reasons": [
                   "urgency medium (+20)",
                   "category money (+12)"
-                ]
-              },
-              {
-                "id": "p3",
-                "title": "Roommate conflict",
-                "score": 28,
-                "reasons": [
-                  "urgency medium (+20)",
-                  "category relationship (+8)"
                 ]
               }
             ],
             "top": [
               {
                 "id": "p1",
-                "title": "Academic deadline uncertainty",
+                "title": "Unclear academic deadline",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -275,24 +230,24 @@
           "label": "executed",
           "phase": "use_tools",
           "kind": "calculateTime",
-          "at": "2026-09-26T15:56:48.740Z",
-          "summary": "\"this coming Thursday\" = Thu, 1 Oct, 2026, 11:59 pm (5 days 2 hours 32 minutes left)",
+          "at": "2026-09-26T16:42:58.196551+00:00",
+          "summary": "\"Thursday\" = Thu, 1 Oct 2026, 11:59 PM (5 days 1 hour 46 minutes left)",
           "detail": {
-            "expression": "this coming Thursday",
+            "expression": "Thursday",
             "timezone": "Asia/Kolkata",
             "now": {
-              "iso": "2026-09-26T15:56:48.739Z",
-              "local": "Sat, 26 Sept, 2026, 9:26 pm"
+              "iso": "2026-09-26T16:42:58.196324+00:00",
+              "local": "Sat, 26 Sep 2026, 10:12 PM"
             },
             "resolved": {
-              "iso": "2026-10-01T18:29:00.000Z",
-              "local": "Thu, 1 Oct, 2026, 11:59 pm",
+              "iso": "2026-10-01T23:59:00+05:30",
+              "local": "Thu, 1 Oct 2026, 11:59 PM",
               "date": "2026-10-01",
               "interpretation": "the coming Thursday"
             },
             "timeSpecified": false,
-            "remaining": "5 days 2 hours 32 minutes",
-            "minutesRemaining": 7352,
+            "remaining": "5 days 1 hour 46 minutes",
+            "minutesRemaining": 7306,
             "alreadyPassed": false,
             "ambiguous": false,
             "alternatives": [],
@@ -306,29 +261,32 @@
           "step": 4,
           "label": "executed",
           "phase": "use_tools",
-          "kind": "createTask",
-          "at": "2026-09-26T15:56:51.561Z",
-          "summary": "Batch batch_17662d86: created 2 task(s).",
+          "kind": "calculateTime",
+          "at": "2026-09-26T16:42:58.196764+00:00",
+          "summary": "\"Friday\" = Fri, 2 Oct 2026, 11:59 PM (6 days 1 hour 46 minutes left)",
           "detail": {
-            "batchId": "batch_17662d86",
-            "status": "complete",
-            "succeeded": [
-              {
-                "index": 0,
-                "taskId": "task_53fd8329",
-                "title": "Verify assignment deadline",
-                "due": "2026-09-27T18:29:00.000Z"
-              },
-              {
-                "index": 1,
-                "taskId": "task_6d60b1d8",
-                "title": "Create project breakdown",
-                "due": "2026-09-27T18:29:00.000Z"
-              }
+            "expression": "Friday",
+            "timezone": "Asia/Kolkata",
+            "now": {
+              "iso": "2026-09-26T16:42:58.196616+00:00",
+              "local": "Sat, 26 Sep 2026, 10:12 PM"
+            },
+            "resolved": {
+              "iso": "2026-10-02T23:59:00+05:30",
+              "local": "Fri, 2 Oct 2026, 11:59 PM",
+              "date": "2026-10-02",
+              "interpretation": "the coming Friday"
+            },
+            "timeSpecified": false,
+            "remaining": "6 days 1 hour 46 minutes",
+            "minutesRemaining": 8746,
+            "alreadyPassed": false,
+            "ambiguous": false,
+            "alternatives": [],
+            "assumptions": [
+              "No time was given, so the deadline is set to 11:59pm that day. Ask for the exact time if it matters."
             ],
-            "failed": [],
-            "remaining": [],
-            "recovery": null
+            "needsUserConfirmation": false
           }
         },
         {
@@ -336,83 +294,73 @@
           "label": "asking",
           "phase": "ask",
           "kind": "clarifying_questions",
-          "at": "2026-09-26T15:56:53.886Z",
-          "summary": "Can you check your syllabus, course portal, or ask a classmate to confirm if the deadline is Thursday or Friday? | What urgent expense do you need money for right now, and is there anyone else (like family) you can reach out to instead of your roommate?",
+          "at": "2026-09-26T16:43:10.205473+00:00",
+          "summary": "Can you check your syllabus or course portal to confirm if the deadline is Thursday, Oct 1st or Friday, Oct 2nd? | What is the money for, and is there any other way to get it besides asking your roommate?",
           "detail": {
-            "why": "Confirming the deadline prevents missed submissions, and knowing the specific financial need helps find safe options without escalating roommate tension."
+            "why": "I need to know the exact deadline to help you plan your time, and I want to help you find a safer financial solution than borrowing from a roommate you're currently not speaking to."
           }
         }
       ]
     },
     {
-      "runId": "run_a9c923b2",
-      "situationId": "sit_4d9bb3d8",
+      "runId": "run_1c729b5c",
+      "situationId": "sit_dd752ec9",
       "situationVersion": 2,
       "mode": "normal",
-      "status": "completed",
-      "response": "**What Changed**\nYou confirmed your assignment deadline is Thursday, 1 October at 5:00 pm based on your professor's email, and that the tension with your roommate Aman is over an electricity bill argument.\n\n**Top Priority**\nYour primary focus is finishing the assignment before Thursday at 5:00 pm (about 4 days away). Clearing up the electricity bill issue with Aman will also help lower your daily stress while you work.\n\n**Next Steps**\n1. **Break down your assignment:** Divide the project into daily targets starting today so you submit well before Thursday 5:00 pm.\n2. **Resolve the bill issue with Aman:** I have saved a WhatsApp draft for Aman to help talk through the electricity bill calmly. Let me know if you would like to review or send it.\n3. **Plan expenses:** Once the bill\n issue is discussed, check if you still need to arrange funds for urgent expenses.",
-      "questions": [],
+      "status": "awaiting_user",
+      "response": "1. What is the money needed for? (e.g., course fee, project materials, rent)",
+      "questions": [
+        "What is the money needed for? (e.g., course fee, project materials, rent)"
+      ],
       "pendingActions": [],
       "notices": [
-        "Saved a draft to Aman (not sent).",
-        "Created 1 task(s): Resolve electricity bill issue with Aman. You can undo any of them.",
-        "Updated the situation to version 3 (earlier versions are kept)."
+        "Created 1 task(s): Complete assignment. You can undo any of them."
       ],
       "assessment": {
-        "risk_signals": [],
-        "top_priority": {
-          "next_action": "Focus on planning and completing the assignment for Thursday 5pm and resolve the electricity bill issue with Aman calmly.",
-          "problem_id": "p1",
-          "why": "The Thursday 5pm academic deadline is a fixed, high-priority milestone, and clarifying the roommate situation helps avoid immediate living friction."
-        },
+        "request_type": "situation_help",
+        "risk_level": "none",
         "untrusted_instructions_seen": [],
-        "language": "English",
+        "top_priority": {
+          "problem_id": "p1",
+          "next_action": "Focus on the assignment deadline first, then address the roommate situation.",
+          "why": "The academic deadline is fixed and imminent (Thursday, Oct 1st). The roommate conflict is stressful but secondary to meeting the academic requirement."
+        },
+        "missing_info": [
+          "What is the money needed for? (e.g., course fee, project materials, rent)"
+        ],
+        "risk_signals": [],
         "problems": [
           {
-            "deadline_text": "Thursday 5pm",
+            "urgency": "high",
+            "title": "Assignment deadline",
+            "deadline_text": "Thursday, Oct 1st, 5 PM",
+            "category": "academic",
             "id": "p1",
             "facts": [
-              "Assignment deadline confirmed as Thursday 5pm via professor's email"
-            ],
-            "urgency": "high",
-            "category": "academic",
-            "title": "Academic Assignment Deadline"
+              "Professor confirmed the deadline via email"
+            ]
           },
           {
             "urgency": "medium",
-            "title": "Roommate conflict with Aman",
-            "facts": [
-              "Roommate is Aman",
-              "Argued about electricity bill",
-              "Currently not talking"
-            ],
-            "category": "relationship",
+            "title": "Financial need and roommate conflict",
             "id": "p2",
-            "deadline_text": null
+            "category": "money",
+            "deadline_text": "None specified",
+            "facts": [
+              "User has no savings",
+              "User needs to borrow money",
+              "User is in a conflict with roommate Aman over an electricity bill"
+            ]
           }
         ],
-        "request_type": "situation_help",
-        "risk_level": "none",
-        "contradictions": [
-          {
-            "about": "Assignment deadline",
-            "statements": [
-              "v1: deadline is Friday... actually wait, I think the professor said Thursday",
-              "v2: checked the email: the professor said Thursday 5pm"
-            ],
-            "provisional_choice": "Thursday 5pm as confirmed by professor's email"
-          }
-        ],
-        "missing_info": [
-          "What urgent expense money is needed for (or if money is urgently needed right now)",
-          "Details of the project/assignment requirements"
-        ]
+        "language": "English",
+        "contradictions": []
       },
       "priority": {
         "ranked": [
           {
             "id": "p1",
-            "title": "Academic Assignment Deadline",
+            "title": "Assignment deadline",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -421,18 +369,18 @@
           },
           {
             "id": "p2",
-            "title": "Roommate conflict with Aman",
-            "score": 28,
+            "title": "Financial need and roommate conflict",
+            "score": 32,
             "reasons": [
               "urgency medium (+20)",
-              "category relationship (+8)"
+              "category money (+12)"
             ]
           }
         ],
         "top": [
           {
             "id": "p1",
-            "title": "Academic Assignment Deadline",
+            "title": "Assignment deadline",
             "score": 45,
             "reasons": [
               "urgency high (+30)",
@@ -445,26 +393,22 @@
         "agreesWithModel": true
       },
       "budget": {
-        "toolCallsUsed": 4,
+        "toolCallsUsed": 3,
         "maxToolCalls": 10,
         "exhausted": false
       },
       "findingsSoFar": [
         {
           "tool": "calculateTime",
-          "summary": "\"Thursday 5pm\" = Thu, 1 Oct, 2026, 5:00 pm (4 days 19 hours 32 minutes left)"
-        },
-        {
-          "tool": "draftMessage",
-          "summary": "draft draft_5cef33c7 to Aman"
+          "summary": "\"Thursday, Oct 1st, 5pm\" = Thu, 1 Oct 2026, 5:00 PM (4 days 18 hours 47 minutes left)"
         },
         {
           "tool": "createTask",
-          "summary": "tasks: Resolve electricity bill issue with Aman"
+          "summary": "tasks: Complete assignment"
         }
       ],
       "modelsUsed": [
-        "gemini-3.6-flash"
+        "gemini-3.1-flash-lite-preview"
       ],
       "trace": [
         {
@@ -472,57 +416,47 @@
           "label": "reasoning",
           "phase": "understand",
           "kind": "assessment",
-          "at": "2026-09-26T15:57:03.105Z",
+          "at": "2026-09-26T16:43:16.323733+00:00",
           "summary": "2 problem(s); request_type=situation_help; risk=none.",
           "detail": {
-            "risk_signals": [],
-            "top_priority": {
-              "next_action": "Focus on planning and completing the assignment for Thursday 5pm and resolve the electricity bill issue with Aman calmly.",
-              "problem_id": "p1",
-              "why": "The Thursday 5pm academic deadline is a fixed, high-priority milestone, and clarifying the roommate situation helps avoid immediate living friction."
-            },
+            "request_type": "situation_help",
+            "risk_level": "none",
             "untrusted_instructions_seen": [],
-            "language": "English",
+            "top_priority": {
+              "problem_id": "p1",
+              "next_action": "Focus on the assignment deadline first, then address the roommate situation.",
+              "why": "The academic deadline is fixed and imminent (Thursday, Oct 1st). The roommate conflict is stressful but secondary to meeting the academic requirement."
+            },
+            "missing_info": [
+              "What is the money needed for? (e.g., course fee, project materials, rent)"
+            ],
+            "risk_signals": [],
             "problems": [
               {
-                "deadline_text": "Thursday 5pm",
+                "urgency": "high",
+                "title": "Assignment deadline",
+                "deadline_text": "Thursday, Oct 1st, 5 PM",
+                "category": "academic",
                 "id": "p1",
                 "facts": [
-                  "Assignment deadline confirmed as Thursday 5pm via professor's email"
-                ],
-                "urgency": "high",
-                "category": "academic",
-                "title": "Academic Assignment Deadline"
+                  "Professor confirmed the deadline via email"
+                ]
               },
               {
                 "urgency": "medium",
-                "title": "Roommate conflict with Aman",
-                "facts": [
-                  "Roommate is Aman",
-                  "Argued about electricity bill",
-                  "Currently not talking"
-                ],
-                "category": "relationship",
+                "title": "Financial need and roommate conflict",
                 "id": "p2",
-                "deadline_text": null
+                "category": "money",
+                "deadline_text": "None specified",
+                "facts": [
+                  "User has no savings",
+                  "User needs to borrow money",
+                  "User is in a conflict with roommate Aman over an electricity bill"
+                ]
               }
             ],
-            "request_type": "situation_help",
-            "risk_level": "none",
-            "contradictions": [
-              {
-                "about": "Assignment deadline",
-                "statements": [
-                  "v1: deadline is Friday... actually wait, I think the professor said Thursday",
-                  "v2: checked the email: the professor said Thursday 5pm"
-                ],
-                "provisional_choice": "Thursday 5pm as confirmed by professor's email"
-              }
-            ],
-            "missing_info": [
-              "What urgent expense money is needed for (or if money is urgently needed right now)",
-              "Details of the project/assignment requirements"
-            ]
+            "language": "English",
+            "contradictions": []
           }
         },
         {
@@ -530,13 +464,13 @@
           "label": "reasoning",
           "phase": "reason",
           "kind": "priority_ranked",
-          "at": "2026-09-26T15:57:03.105Z",
-          "summary": "Top priority (code-ranked): Academic Assignment Deadline. Model's own pick agrees.",
+          "at": "2026-09-26T16:43:16.323740+00:00",
+          "summary": "Top priority (code-ranked): Assignment deadline. Model's own pick agrees.",
           "detail": {
             "ranked": [
               {
                 "id": "p1",
-                "title": "Academic Assignment Deadline",
+                "title": "Assignment deadline",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -545,18 +479,18 @@
               },
               {
                 "id": "p2",
-                "title": "Roommate conflict with Aman",
-                "score": 28,
+                "title": "Financial need and roommate conflict",
+                "score": 32,
                 "reasons": [
                   "urgency medium (+20)",
-                  "category relationship (+8)"
+                  "category money (+12)"
                 ]
               }
             ],
             "top": [
               {
                 "id": "p1",
-                "title": "Academic Assignment Deadline",
+                "title": "Assignment deadline",
                 "score": 45,
                 "reasons": [
                   "urgency high (+30)",
@@ -574,24 +508,24 @@
           "label": "executed",
           "phase": "use_tools",
           "kind": "calculateTime",
-          "at": "2026-09-26T15:58:03.136Z",
-          "summary": "\"Thursday 5pm\" = Thu, 1 Oct, 2026, 5:00 pm (4 days 19 hours 32 minutes left)",
+          "at": "2026-09-26T16:43:27.087970+00:00",
+          "summary": "\"Thursday, Oct 1st, 5pm\" = Thu, 1 Oct 2026, 5:00 PM (4 days 18 hours 47 minutes left)",
           "detail": {
-            "expression": "Thursday 5pm",
+            "expression": "Thursday, Oct 1st, 5pm",
             "timezone": "Asia/Kolkata",
             "now": {
-              "iso": "2026-09-26T15:58:03.135Z",
-              "local": "Sat, 26 Sept, 2026, 9:28 pm"
+              "iso": "2026-09-26T16:43:27.087727+00:00",
+              "local": "Sat, 26 Sep 2026, 10:13 PM"
             },
             "resolved": {
-              "iso": "2026-10-01T11:30:00.000Z",
-              "local": "Thu, 1 Oct, 2026, 5:00 pm",
+              "iso": "2026-10-01T17:00:00+05:30",
+              "local": "Thu, 1 Oct 2026, 5:00 PM",
               "date": "2026-10-01",
               "interpretation": "the coming Thursday"
             },
             "timeSpecified": true,
-            "remaining": "4 days 19 hours 32 minutes",
-            "minutesRemaining": 6932,
+            "remaining": "4 days 18 hours 47 minutes",
+            "minutesRemaining": 6887,
             "alreadyPassed": false,
             "ambiguous": false,
             "alternatives": [],
@@ -603,35 +537,18 @@
           "step": 4,
           "label": "executed",
           "phase": "use_tools",
-          "kind": "draft_saved",
-          "at": "2026-09-26T15:58:05.600Z",
-          "summary": "Draft draft_5cef33c7 to Aman saved. Nothing sent.",
-          "detail": {
-            "ok": true,
-            "draftId": "draft_5cef33c7",
-            "recipient": "Aman",
-            "channel": "whatsapp",
-            "body": "Hey Aman, hope you're doing well. I wanted to clear the air about the electricity bill so we can get it sorted out peacefully. Let me know when you're free to talk for a few minutes.",
-            "purpose": "Clear the air about the electricity bill conflict with roommate Aman",
-            "note": "Draft saved. Nothing has been sent."
-          }
-        },
-        {
-          "step": 5,
-          "label": "executed",
-          "phase": "use_tools",
           "kind": "createTask",
-          "at": "2026-09-26T15:58:07.529Z",
-          "summary": "Batch batch_0ac26176: created 1 task(s).",
+          "at": "2026-09-26T16:43:30.162729+00:00",
+          "summary": "Batch batch_0825c3c0: created 1 task(s).",
           "detail": {
-            "batchId": "batch_0ac26176",
+            "batchId": "batch_0825c3c0",
             "status": "complete",
             "succeeded": [
               {
                 "index": 0,
-                "taskId": "task_03ebdaa0",
-                "title": "Resolve electricity bill issue with Aman",
-                "due": "2026-09-27T18:29:00.000Z"
+                "taskId": "task_6413d9a8",
+                "title": "Complete assignment",
+                "due": "2026-10-01T17:00:00+05:30"
               }
             ],
             "failed": [],
@@ -640,28 +557,15 @@
           }
         },
         {
-          "step": 6,
-          "label": "executed",
-          "phase": "use_tools",
-          "kind": "updateSituation",
-          "at": "2026-09-26T15:58:09.725Z",
-          "summary": "Situation v2 -> v3. Reversible: history kept.",
+          "step": 5,
+          "label": "asking",
+          "phase": "ask",
+          "kind": "clarifying_questions",
+          "at": "2026-09-26T16:43:41.740163+00:00",
+          "summary": "What is the money needed for? (e.g., course fee, project materials, rent)",
           "detail": {
-            "version": 3,
-            "previousVersion": 2,
-            "changes": [
-              "Deadline confirmed as Thursday, 1 October at 5:00 pm based on professor's email.",
-              "Roommate identified as Aman; conflict stems from electricity bill argument."
-            ]
+            "why": "Knowing the purpose helps determine if there are other resources available (like university hardship funds or department support) so you don't have to rely on a strained relationship with your roommate."
           }
-        },
-        {
-          "step": 7,
-          "label": "reasoning",
-          "phase": "recommend",
-          "kind": "recommendation",
-          "at": "2026-09-26T15:58:14.079Z",
-          "summary": "**What Changed**\nYou confirmed your assignment deadline is Thursday, 1 October at 5:00 pm based on your professor's email, and that the tension with your roommate Aman is over an electricity bill argument.\n\n**Top Priority**\nYour primary focus is finishing the assignment before Thursday at 5:00 pm (about 4 days away). Clearing up the electricity bill issue with Aman will also help lower your daily stress while you work.\n\n**Next Steps**\n1. **Break down your assignment:** Divide the project into daily targets starting today so you submit well before Thursday 5:00 pm.\n2. **Resolve the bill issue with Aman:** I have saved a WhatsApp draft for Aman to help talk through the electricity bill calmly. Let me know if you would like to review or send it.\n3. **Plan expenses:** Once the bill\n issue is discussed, check if you still need to arrange funds for urgent expenses."
         }
       ]
     }

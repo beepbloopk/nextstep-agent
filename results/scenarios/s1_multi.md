@@ -1,60 +1,63 @@
 # s1_multi: Multi-problem
 
-Input (from https://nextstepmockapi.onrender.com/v1/scenarios):
+Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
 
 > Viva is at 10am tomorrow, laptop won't boot, my project partner has been ignoring my calls for 2 days, and my dad just got admitted to a hospital in Surat. I'm in Pune.
 
 ## Turn 1
 
-- status: `completed`, mode: `normal`, tool calls: 3/10, model: gemini-3.8-flash
-- top priority (code-ranked): **Dad hospitalised in Surat** (model's own pick agrees)
-- understood: Dad hospitalised in Surat [health_family/critical]; Viva tomorrow with non-booting laptop and missing partner [academic/high]
-- missing info: Dad's condition severity/stability; Whether the user needs to travel to Surat immediately; Professor/evaluator contact info; Whether project files are backed up on cloud/drive
-- actions taken: Saved a draft to Professor / Evaluator (not sent). Created 3 task(s): Call family in Surat to check dad's condition and travel need; Send emergency email to professor requesting viva rescheduling; Check phone for cloud backup of project files. You can undo any of them.
+- status: `completed`, mode: `normal`, tool calls: 2/10, model: gemini-3.5-flash + gemini-3.1-flash-lite-preview
+- top priority (code-ranked): **Dad hospitalized in Surat** (AI's own pick agrees)
+- understood: Dad hospitalized in Surat [health_family/critical]; Academic Viva tomorrow with technical and partner issues [academic/high]
+- missing info: Dad's health status / severity of hospitalisation; Whether user needs to travel to Surat immediately; Project partner's name or contact details; Professor's name or contact details for the Viva
+- actions taken: Saved a draft to Professor / Viva Examiner (not sent).
 
 **Agent reply:**
 
-> Your dad's health comes first. A medical emergency is a valid, standard ground for an academic deferral, so do not let panic about the viva stop you from focusing on your family right now.
+> I am so sorry to hear about your father. Please prioritize your family right now; everything else can be sorted out later.
 > 
-> Here are your next 3 steps:
+> I have drafted an email for your professor to request a reschedule. You can review and send this whenever you are ready.
 > 
-> 1. **Check on your dad immediately**: Call family or the hospital in Surat to understand how critical the situation is and whether you must leave Pune tonight.
-> 2. **Email your professor tonight**: I have prepared a draft email requesting an emergency deferral citing your father's sudden hospitalisation, laptop failure, and unreachable partner. Review and send it now from your phone so an official request is logged well before 10:00 AM tomorrow.
-> 3. **Check your phone for cloud backups**: Do a quick search on Google Drive, WhatsApp chats, or email on your phone to see if you have your report or slides saved, in case you need to submit whatever you have.
+> **Questions to help you plan:**
+> 1. Do you need to leave for Surat immediately?
+> 2. Do you have family or friends in Surat who can help with your dad, or are you the primary person who needs to be there?
+> 3. Is there anything else urgent you need to handle before you leave?
 > 
-> Take a deep breath and call your family first. If you need travel options to Surat or help reaching out to your partner, let me know.
+> **Next Steps:**
+> *   **Review the draft:** I have saved a draft email for your professor (ID: `draft_643302e7`). You can ask me to show it to you, or you can edit it yourself.
+> *   **Focus on travel:** If you need to go to Surat, please focus on your travel arrangements first. Do not worry about the laptop or your project partner right now.
+> *   **Communicate:** Once you are on your way or have a moment, send that email to your professor. They will likely be understanding given the circumstances.
+> 
+> Please let me know if you need help with anything else.
 
-**Draft saved (draft_0b86e4f8), not sent, shown to the user:**
+**Draft saved (draft_643302e7), not sent, shown to the user:**
 
 ```text
-To: Professor / Evaluator (email)
-Subject: Urgent: Emergency Viva Rescheduling Request - [Your Name] - [Roll Number]
+To: Professor / Viva Examiner (email)
+Subject: Urgent: Request to reschedule Viva due to family medical emergency - [Your Name]
 
-Dear Professor [Professor's Name],
+Dear Professor,
 
-I am writing to urgently request an emergency rescheduling or permission to appear online for my viva scheduled for tomorrow, Sunday, at 10:00 AM. 
+I am writing to urgently request a reschedule or an online option for my Viva scheduled for tomorrow, Sunday at 10:00 AM. 
 
-My father was just admitted to a hospital in Surat this evening, and I am currently coordinating his emergency care and may need to travel immediately from Pune. Additionally, my laptop has suffered a hardware boot failure, and I have been unable to reach my project partner for the past two days.
+My father has just been admitted to a hospital in Surat due to a medical emergency, and I need to attend to this family crisis immediately. Additionally, my laptop has experienced a technical failure and is not booting. 
 
-I will share whatever project documents or drafts are accessible via my cloud drive right away. Could you please grant me a deferral or advise on how I can appear under these extenuating circumstances? I will keep you updated as soon as my family situation stabilises.
+I would be extremely grateful if I could be permitted to take the Viva at a later date or online once the situation stabilizes. I will keep you updated and can provide medical documentation if required.
 
-Thank you very much for your understanding.
+Thank you for your understanding.
 
 Sincerely,
 [Your Name]
-[Roll Number / Department]
-[Phone Number]
 ```
 
 <details><summary>Trace (labelled steps)</summary>
 
 ```text
 1. [reasoning] assessment: 2 problem(s); request_type=situation_help; risk=none.
-2. [reasoning] priority_ranked: Top priority (code-ranked): Dad hospitalised in Surat. Model's own pick agrees.
-3. [executed] calculateTime: "tomorrow 10am" = Sun, 27 Sept, 2026, 10:00 am (12 hours 42 minutes left)
-4. [executed] draft_saved: Draft draft_0b86e4f8 to Professor / Evaluator saved. Nothing sent.
-5. [executed] createTask: Batch batch_a0aa44e0: created 3 task(s).
-6. [reasoning] recommendation: Your dad's health comes first. A medical emergency is a valid, standard ground for an academic deferral, so do not let panic about the viva stop you from focusi
+2. [reasoning] priority_ranked: Top priority (code-ranked): Dad hospitalized in Surat. Model's own pick agrees.
+3. [executed] calculateTime: "tomorrow 10am" = Sun, 27 Sep 2026, 10:00 AM (11 hours 51 minutes left)
+4. [executed] draft_saved: Draft draft_643302e7 to Professor / Viva Examiner saved. Nothing sent.
+5. [reasoning] recommendation: I am so sorry to hear about your father. Please prioritize your family right now; everything else can be sorted out later.
 ```
 
 </details>

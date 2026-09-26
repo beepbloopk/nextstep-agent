@@ -1,63 +1,56 @@
 {
-  "model": "gemini-3.1-flash-lite",
-  "temperature": 0,
   "input": "Viva is at 10am tomorrow, laptop won't boot, my project partner has been ignoring my calls for 2 days, and my dad just got admitted to a hospital in Surat. I'm in Pune.",
+  "temperature": 0,
   "runs": [
     {
       "run": 1,
-      "codeTop": "Dad's hospitalization",
+      "model": "gemini-3.5-flash-lite",
+      "codeTop": "Dad in hospital in Surat",
       "codeTopCategory": "health_family",
-      "modelPickTitle": "Dad's hospitalization",
-      "modelPickCategory": "health_family",
-      "firstAction": "Prioritize the family emergency and communicate the situation to the college/professor.",
-      "status": "completed",
-      "model": "gemini-3.1-flash-lite"
+      "aiPick": "Dad in hospital in Surat",
+      "aiPickCategory": "health_family",
+      "nextAction": "Call the college professor or department head immediately to inform them about the family medical emergency and ask for a rescheduling or online option."
     },
     {
       "run": 2,
-      "codeTop": "Dad hospitalized in Surat",
+      "model": "gemini-3.5-flash-lite",
+      "codeTop": "Dad admitted to hospital",
       "codeTopCategory": "health_family",
-      "modelPickTitle": "Dad hospitalized in Surat",
-      "modelPickCategory": "health_family",
-      "firstAction": "Assess if the user needs to travel to Surat immediately or if they can manage the viva first.",
-      "status": "completed",
-      "model": "gemini-3.1-flash-lite"
+      "aiPick": "Dad admitted to hospital",
+      "aiPickCategory": "health_family",
+      "nextAction": "Contact college/professor immediately regarding dad's medical emergency and request viva rescheduling or accommodation."
     },
     {
       "run": 3,
-      "codeTop": "Family Emergency",
+      "model": "gemini-3.5-flash-lite",
+      "codeTop": "Dad hospitalized in Surat",
       "codeTopCategory": "health_family",
-      "modelPickTitle": "Family Emergency",
-      "modelPickCategory": "health_family",
-      "firstAction": "Prioritize the family emergency and communicate with the professor immediately.",
-      "status": "completed",
-      "model": "gemini-3.1-flash-lite"
+      "aiPick": "Dad hospitalized in Surat",
+      "aiPickCategory": "health_family",
+      "nextAction": "Deal with the family situation first and inform the college/professor about the emergency so you can get an extension for the viva."
     },
     {
       "run": 4,
-      "codeTop": "Dad's hospitalization",
+      "model": "gemini-3.5-flash-lite",
+      "codeTop": "Father in hospital",
       "codeTopCategory": "health_family",
-      "modelPickTitle": "Viva exam crisis",
-      "modelPickCategory": "academic",
-      "firstAction": "Address the immediate academic crisis while acknowledging the family emergency.",
-      "status": "completed",
-      "model": "gemini-3.1-flash-lite"
+      "aiPick": "Father in hospital",
+      "aiPickCategory": "health_family",
+      "nextAction": "Contact the professor or college authorities immediately about the family emergency and laptop issue to request a postponement or online viva option."
     },
     {
       "run": 5,
-      "codeTop": "Dad's hospitalization",
+      "model": "gemini-3.5-flash-lite",
+      "codeTop": "Dad in hospital in Surat",
       "codeTopCategory": "health_family",
-      "modelPickTitle": "Dad's hospitalization",
-      "modelPickCategory": "health_family",
-      "firstAction": "Contact professor/college immediately regarding the viva and the family emergency.",
-      "status": "completed",
-      "model": "gemini-3.1-flash-lite"
+      "aiPick": "Dad in hospital in Surat",
+      "aiPickCategory": "health_family",
+      "nextAction": "Call the college department or professor immediately to inform them about the family emergency and request a postponement or alternative arrangement for the viva."
     }
   ],
   "verdict": {
     "codeTopCategoryStable": true,
-    "modelPickCategoryStable": false,
-    "firstActionStable": false,
+    "aiPickCategoryStable": true,
     "sameModelAllRuns": true
   }
 }
