@@ -203,7 +203,11 @@ export class NextStepAgent {
       modelsUsed: [],
       trace: trace.steps,
     };
+    let careNote = false;
     const finish = (): RunResult => {
+      if (careNote && result.mode === "normal") {
+        result.response += "\n\nThat is a lot to carry at once. If it starts to feel like too much, you can talk to someone at Tele-MANAS on 14416 (free, 24x7).";
+      }
       const guarded = guardOutput(result.response);
       if (!guarded.safe) trace.add("reasoning", "recommend", "output_guard_blocked", "Final reply asked the user to share a secret; replaced before the user saw it.", { blocked: guarded.blocked });
       result.response = noEmDash(guarded.text);
@@ -274,9 +278,17 @@ export class NextStepAgent {
       );
     }
 
-    if (assessment.risk_level && assessment.risk_level !== "none") {
-      trace.add("reasoning", "understand", "risk_detected", `Model assessment flagged risk (${assessment.risk_level}): ${assessment.risk_signals.join(", ")}. Switching to support mode.`);
+    // Proportionate risk gate. "acute" from the model goes to support mode (keyword matches already
+    // did, above). "elevated" from the model alone keeps the practical help and adds a check-in:
+    // in testing, a lighter model flagged "dad in hospital + viva tomorrow" as elevated risk 5/5
+    // times, and support mode would have left that student with no plan at all.
+    if (assessment.risk_level === "acute") {
+      trace.add("reasoning", "understand", "risk_detected", `Model assessment flagged acute risk: ${assessment.risk_signals.join(", ")}. Switching to support mode.`);
       return this.support(result, trace, userText, finish);
+    }
+    if (assessment.risk_level === "elevated") {
+      careNote = true;
+      trace.add("reasoning", "understand", "wellbeing_check_in", `Model flagged elevated stress (${assessment.risk_signals.join(", ")}) with no crisis language. Keeping practical help, adding a check-in and helpline.`);
     }
     if (assessOnly) {
       result.response = "(assessment only: no tools run)";

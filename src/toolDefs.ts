@@ -12,7 +12,7 @@ export const recordAssessmentTool: Anthropic.Tool = {
     properties: {
       language: { type: "string", description: "e.g. English, Hinglish" },
       request_type: { type: "string", enum: ["situation_help", "out_of_scope", "harmful"], description: "harmful = wants deceptive content, harassment, fraud or similar" },
-      risk_level: { type: "string", enum: ["none", "elevated", "acute"], description: "Signs the user may be in emotional crisis or at risk of self-harm, including indirect ones like hopelessness or 'what's the point'." },
+      risk_level: { type: "string", enum: ["none", "elevated", "acute"], description: "Risk to the user's own wellbeing. acute: hopelessness, wanting everything to stop, not wanting to live, self-harm, including indirect phrasing like 'what's the point'. elevated: the user sounds emotionally worn down or overwhelmed about themselves. none: stressful circumstances (even several at once, even a family emergency) with no such signs. High stress alone is NOT risk." },
       risk_signals: { type: "array", items: { type: "string" } },
       problems: {
         type: "array",

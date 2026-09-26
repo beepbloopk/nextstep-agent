@@ -1,0 +1,63 @@
+{
+  "model": "gemini-3.1-flash-lite",
+  "temperature": 0,
+  "input": "Viva is at 10am tomorrow, laptop won't boot, my project partner has been ignoring my calls for 2 days, and my dad just got admitted to a hospital in Surat. I'm in Pune.",
+  "runs": [
+    {
+      "run": 1,
+      "codeTop": "Dad's hospitalization",
+      "codeTopCategory": "health_family",
+      "modelPickTitle": "Dad's hospitalization",
+      "modelPickCategory": "health_family",
+      "firstAction": "Prioritize the family emergency and communicate the situation to the college/professor.",
+      "status": "completed",
+      "model": "gemini-3.1-flash-lite"
+    },
+    {
+      "run": 2,
+      "codeTop": "Dad hospitalized in Surat",
+      "codeTopCategory": "health_family",
+      "modelPickTitle": "Dad hospitalized in Surat",
+      "modelPickCategory": "health_family",
+      "firstAction": "Assess if the user needs to travel to Surat immediately or if they can manage the viva first.",
+      "status": "completed",
+      "model": "gemini-3.1-flash-lite"
+    },
+    {
+      "run": 3,
+      "codeTop": "Family Emergency",
+      "codeTopCategory": "health_family",
+      "modelPickTitle": "Family Emergency",
+      "modelPickCategory": "health_family",
+      "firstAction": "Prioritize the family emergency and communicate with the professor immediately.",
+      "status": "completed",
+      "model": "gemini-3.1-flash-lite"
+    },
+    {
+      "run": 4,
+      "codeTop": "Dad's hospitalization",
+      "codeTopCategory": "health_family",
+      "modelPickTitle": "Viva exam crisis",
+      "modelPickCategory": "academic",
+      "firstAction": "Address the immediate academic crisis while acknowledging the family emergency.",
+      "status": "completed",
+      "model": "gemini-3.1-flash-lite"
+    },
+    {
+      "run": 5,
+      "codeTop": "Dad's hospitalization",
+      "codeTopCategory": "health_family",
+      "modelPickTitle": "Dad's hospitalization",
+      "modelPickCategory": "health_family",
+      "firstAction": "Contact professor/college immediately regarding the viva and the family emergency.",
+      "status": "completed",
+      "model": "gemini-3.1-flash-lite"
+    }
+  ],
+  "verdict": {
+    "codeTopCategoryStable": true,
+    "modelPickCategoryStable": false,
+    "firstActionStable": false,
+    "sameModelAllRuns": true
+  }
+}

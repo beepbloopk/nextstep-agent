@@ -268,3 +268,15 @@ test("jugaad: 'forget me' makes content unreadable but still prevents a double s
   // And nothing new can be written under an erased situation.
   assert.throws(() => store.append(sid, "situation_version", { data: { text: "new" } }));
 });
+
+test("risk gate: model-only 'elevated' keeps practical help and adds a check-in; 'acute' goes to support", async () => {
+  const e = env(undefined, [assessTurn({ risk_level: "elevated", risk_signals: ["many stressors"] }), text("Call your family first.")]);
+  const r = await e.agent.start({ text: "Viva tomorrow and dad in hospital" });
+  assert.equal(r.mode, "normal");
+  assert.ok(r.response.startsWith("Call your family first."));
+  assert.ok(r.response.includes("14416"));
+  const e2 = env(undefined, [assessTurn({ risk_level: "acute", risk_signals: ["no reason to go on"] }), text("I'm here. Are you safe right now? Tele-MANAS 14416.")]);
+  const r2 = await e2.agent.start({ text: "I can't see a way forward with any of it" });
+  assert.equal(r2.mode, "support");
+  assert.equal(e2.model.calls[1].tools, undefined);
+});
