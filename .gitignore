@@ -1,0 +1,6 @@
+node_modules/
+.env
+# Runtime state: situation logs, per-situation keys, outbox, runtime traces.
+data/
+# Scratch output from ad-hoc runs (committed results live in results/ and traces/)
+tmp/

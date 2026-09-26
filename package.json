@@ -1,0 +1,27 @@
+{
+  "name": "nextstep-agent",
+  "version": "0.1.0",
+  "description": "NextStep Agent: an action-taking decision assistant that never runs an irreversible action without the user seeing and confirming it.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "agent": "node src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "demo:blockers": "node scripts/demo-blockers.ts",
+    "scenarios": "node scripts/run-scenarios.ts",
+    "trace:sample": "node scripts/sample-trace.ts",
+    "determinism": "node scripts/determinism.ts",
+    "injection": "node scripts/injection-live.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^7.0.2"
+  }
+}
