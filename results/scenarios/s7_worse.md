@@ -6,40 +6,79 @@ Input (from https://nextstepmockapi.onrender.com/v1/scenarios (attempt 1)):
 
 ## Turn 1
 
-- status: `completed`, mode: `normal`, tool calls: 2/10, model: gemini-3.5-flash-lite
-- top priority (code-ranked): **Manager CC'd HR after email** (model's own pick agrees)
-- understood: Manager CC'd HR after email [work/high]
-- missing info: What did the manager's email to HR say?; What was the original email about?
-- actions taken: Saved a draft to Manager and HR (not sent). Created 1 task(s): Review and send the draft response to your manager and HR. You can undo any of them.
+- status: `awaiting_user`, mode: `normal`, tool calls: 2/10, model: gemini-3.7-flash
+- top priority (code-ranked): **Manager escalated email conflict to HR** (model's own pick agrees)
+- understood: Manager escalated email conflict to HR [work/high]
+- missing info: What was the context/topic of the email sent to the manager; What specific response or concerns did the manager or HR express
+- actions taken: Created 2 task(s): Hold off on sending any immediate reply to the email thread; Review the manager's email and note specific concerns raised. You can undo any of them.
 
 **Agent reply:**
 
-> I am really sorry that happened, and I understand why you feel stressed. When HR gets involved, the best approach is to stay calm, professional, and cooperative rather than defensive. 
-> 
-> Your top priority right now is to de-escalate the situation by showing you are willing to communicate and clear up any misunderstandings.
-> 
-> Here are your next steps:
-> 1. Review the draft message I prepared for your manager and HR (saved as a draft) to help clear the air politely.
-> 2. Avoid replying while upset or arguing over email; keep things brief and solution-oriented.
-> 3. Plan to request a quick, calm conversation with them tomorrow to get back on the same page.
+> 1. What specific points did your manager raise in her reply with HR CC'd?
+> 2. Would you like to resolve this over a quick 1-on-1 call with her first, or send a calm, professional written clarification?
 
-**Draft saved (draft_cb1e9cbe), not sent, shown to the user:**
+<details><summary>Trace (labelled steps)</summary>
 
 ```text
-To: Manager and HR (email)
-Subject: Clarification and next steps
+1. [reasoning] assessment: 1 problem(s); request_type=situation_help; risk=none.
+2. [reasoning] priority_ranked: Top priority (code-ranked): Manager escalated email conflict to HR. Model's own pick agrees.
+3. [executed] createTask: Batch batch_bf3c1128: created 2 task(s).
+4. [asking] clarifying_questions: What specific points did your manager raise in her reply with HR CC'd? | Would you like to resolve this over a quick 1-on-1 call with her first, or send a calm,
+```
 
-Hi [Manager Name] and [HR Name],\n\nThank you for looping HR in. I want to apologise if my previous email came across the wrong way. My only intention was to clarify my responsibilities and ensure I am aligned with the team's goals.\n\nCould we schedule a brief chat tomorrow to discuss how I can best support the team moving forward?\n\nBest regards,\n[Your Name]
+</details>
+
+## Turn 2
+
+SIMULATED user answer (written for this test run, not a real user): "I told her the deadline she set was unrealistic and cc'd the whole team. She replied that my tone was unprofessional and added HR. Her name is Priya."
+
+- status: `awaiting_confirmation`, mode: `normal`, tool calls: 4/10, model: gemini-3-flash-preview + gemini-3.7-flash
+- top priority (code-ranked): **Conflict with manager (Priya) involving HR** (model's own pick agrees)
+- understood: Conflict with manager (Priya) involving HR [work/high]
+- missing info: What is the user's job role?; What was the original deadline and the project?
+- actions taken: Updated the situation to version 3 (earlier versions are kept). Saved a draft to Manager (Priya) and HR (not sent). Created 1 task(s): Review and approve the draft reply to Priya and HR. You can undo any of them.
+
+**Agent reply:**
+
+> The situation has escalated because CC'ing the whole team to challenge a deadline is often seen as a public challenge to a manager's authority. Since Priya has involved HR, the priority is to de-escalate immediately by acknowledging the mistake in communication while keeping the focus on your commitment to the work.
+> 
+> **Top Priority:** De-escalate the HR situation by sending a professional apology that acknowledges the error in CC'ing the team.
+> 
+> **Next Steps:**
+> 1. **Review the draft email:** I have prepared a reply to Priya and HR that apologises for the tone and the public nature of the previous email, and requests a 1-on-1 to resolve the deadline issue.
+> 2. **Prepare for a 1-on-1:** If she agrees to talk, have a list of specific reasons why the deadline is difficult and a proposed alternative timeline ready.
+> 3. **Stay professional on team channels:** Avoid discussing this conflict with other team members for now to prevent further complications.
+
+**Waiting for confirmation (act_4836e2f7), exact text the user sees:**
+
+```text
+To: Manager (Priya) and HR (email)
+Subject: Re: Project Deadline / Apology & Follow-up
+
+Hi Priya,
+
+Thank you for your response. 
+
+I want to sincerely apologise for the tone of my previous email and for raising the deadline concerns on the team thread. I realise that this should have been discussed with you directly in a 1-on-1 setting rather than in front of the wider team. 
+
+My intent was solely to share concerns about the project timeline, but I handled the communication poorly. I would really appreciate a few minutes on Monday to speak with you directly, hear your feedback, and align on how we can best manage the deliverables.
+
+CC'd HR for visibility as well.
+
+Best regards,
+[Your Name]
 ```
 
 <details><summary>Trace (labelled steps)</summary>
 
 ```text
 1. [reasoning] assessment: 1 problem(s); request_type=situation_help; risk=none.
-2. [reasoning] priority_ranked: Top priority (code-ranked): Manager CC'd HR after email. Model's own pick agrees.
-3. [executed] draft_saved: Draft draft_cb1e9cbe to Manager and HR saved. Nothing sent.
-4. [executed] createTask: Batch batch_283a79ba: created 1 task(s).
-5. [reasoning] recommendation: I am really sorry that happened, and I understand why you feel stressed. When HR gets involved, the best approach is to stay calm, professional, and cooperative
+2. [reasoning] priority_ranked: Top priority (code-ranked): Conflict with manager (Priya) involving HR. Model's own pick agrees.
+3. [executed] updateSituation: Situation v2 -> v3. Reversible: history kept.
+4. [executed] draft_saved: Draft draft_a98ff3a4 to Manager (Priya) and HR saved. Nothing sent.
+5. [proposing] irreversible_action_proposed: Proposed sendMessage to Manager (Priya) and HR. Nothing sent; waiting for the user to confirm the exact text.
+6. [executed] createTask: Batch batch_e87694fd: created 1 task(s).
+7. [reasoning] recommendation: The situation has escalated because CC'ing the whole team to challenge a deadline is often seen as a public challenge to a manager's authority. Since Priya has 
 ```
 
 </details>
