@@ -28,7 +28,7 @@ test("gemini: forced tool choice, system prompt, tool results by name, thought s
         { role: "user", content: [{ type: "tool_result", tool_use_id: "t1", content: "{}" }] },
       ],
     },
-    true,
+    { thinkingBudget: 0 },
   ) as any;
   assert.deepEqual(body.toolConfig.functionCallingConfig, { mode: "ANY", allowedFunctionNames: ["recordAssessment"] });
   assert.equal(body.systemInstruction.parts[0].text, "SYS");

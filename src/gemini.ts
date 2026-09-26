@@ -19,8 +19,8 @@ interface GeminiPart {
   text?: string;
   thought?: boolean;
   thoughtSignature?: string;
-  functionCall?: { name: string; args?: Json };
-  functionResponse?: { name: string; response: Json };
+  functionCall?: { name: string; args?: Json; id?: string };
+  functionResponse?: { name: string; response: Json; id?: string };
 }
 
 interface GeminiContent {
@@ -68,7 +68,7 @@ function toolResultText(content: Anthropic.ToolResultBlockParam["content"]): str
 }
 
 /** Anthropic-shaped request -> Gemini generateContent body. Exported for tests. */
-export function toGeminiRequest(p: Anthropic.MessageCreateParamsNonStreaming, disableThinking: boolean): Json {
+export function toGeminiRequest(p: Anthropic.MessageCreateParamsNonStreaming, thinkingConfig: Json | null): Json {
   const idToName = new Map<string, string>();
   const contents: GeminiContent[] = [];
 
@@ -84,11 +84,13 @@ export function toGeminiRequest(p: Anthropic.MessageCreateParamsNonStreaming, di
           if (b.text) parts.push({ text: String(b.text), ...sig });
         } else if (b.type === "tool_use") {
           idToName.set(String(b.id), String(b.name));
-          parts.push({ functionCall: { name: String(b.name), args: (b.input ?? {}) as Json }, ...sig });
+          const gid = typeof b.gemini_call_id === "string" ? { id: b.gemini_call_id } : {};
+          parts.push({ functionCall: { name: String(b.name), args: (b.input ?? {}) as Json, ...gid }, ...sig });
         } else if (b.type === "tool_result") {
           const tb = b as unknown as Anthropic.ToolResultBlockParam;
           parts.push({
             functionResponse: {
+              ...(tb.tool_use_id.startsWith("toolu_gem_") ? {} : { id: tb.tool_use_id }),
               name: idToName.get(tb.tool_use_id) ?? "unknown_tool",
               response: { content: toolResultText(tb.content), ...(tb.is_error ? { is_error: true } : {}) },
             },
@@ -104,7 +106,7 @@ export function toGeminiRequest(p: Anthropic.MessageCreateParamsNonStreaming, di
     generationConfig: {
       maxOutputTokens: p.max_tokens,
       ...(p.temperature !== undefined ? { temperature: p.temperature } : {}),
-      ...(disableThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+      ...(thinkingConfig ? { thinkingConfig } : {}),
     },
   };
   if (p.system) {
@@ -141,7 +143,9 @@ export function fromGeminiResponse(r: GeminiResponse, model: string): Anthropic.
     if (part.thought) continue; // thinking summaries are not part of the answer
     const sig = part.thoughtSignature ? { gemini_signature: part.thoughtSignature } : {};
     if (part.functionCall) {
-      content.push({ type: "tool_use", id: `toolu_gem_${Date.now().toString(36)}_${++idSeq}`, name: part.functionCall.name, input: part.functionCall.args ?? {}, ...sig });
+      // Gemini 3 returns its own call id; reuse it so the functionResponse can echo it back.
+      const id = part.functionCall.id ?? `toolu_gem_${Date.now().toString(36)}_${++idSeq}`;
+      content.push({ type: "tool_use", id, name: part.functionCall.name, input: part.functionCall.args ?? {}, ...(part.functionCall.id ? { gemini_call_id: part.functionCall.id } : {}), ...sig });
     } else if (typeof part.text === "string" && part.text.length) {
       content.push({ type: "text", text: part.text, citations: null, ...sig });
     }
@@ -174,8 +178,10 @@ export class GeminiModel implements ModelClient {
   }
 
   async create(params: Anthropic.MessageCreateParamsNonStreaming): Promise<Anthropic.Message> {
-    // 2.5 Flash thinks by default; turning it off makes runs faster and more repeatable.
-    const body = toGeminiRequest(params, /2\.5-flash/.test(this.name));
+    // Keep thinking low: faster, cheaper on the free quota, and more repeatable. Gemini 2.5 takes a
+    // budget (0 = off); Gemini 3 takes a level and cannot turn thinking off completely.
+    const thinking = /2\.5-flash/.test(this.name) ? { thinkingBudget: 0 } : /gemini-3/.test(this.name) ? { thinkingLevel: process.env.GEMINI_THINKING_LEVEL || "low" } : null;
+    const body = toGeminiRequest(params, thinking);
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(this.name)}:generateContent`;
     let lastErr = "";
     for (let attempt = 1; attempt <= 5; attempt++) {
