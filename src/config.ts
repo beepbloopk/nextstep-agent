@@ -11,10 +11,20 @@ function intFromEnv(name: string, fallback: number): number {
   return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
+// Provider: explicit NEXTSTEP_PROVIDER wins; otherwise whichever key is present (Gemini first,
+// because it has a free tier).
+const provider: "gemini" | "anthropic" =
+  process.env.NEXTSTEP_PROVIDER === "anthropic" || process.env.NEXTSTEP_PROVIDER === "gemini"
+    ? process.env.NEXTSTEP_PROVIDER
+    : process.env.GEMINI_API_KEY
+      ? "gemini"
+      : "anthropic";
+
 export const config = {
-  // Model strings change; read from env. Default is the current small/fast model.
-  model: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
-  hasApiKey: Boolean(process.env.ANTHROPIC_API_KEY),
+  provider,
+  // Model strings change; read from env. Defaults are each provider's small/fast model.
+  model: provider === "gemini" ? process.env.GEMINI_MODEL || "gemini-2.5-flash" : process.env.ANTHROPIC_MODEL || "claude-haiku-4-5",
+  hasApiKey: Boolean(provider === "gemini" ? process.env.GEMINI_API_KEY : process.env.ANTHROPIC_API_KEY),
   timezone: process.env.NEXTSTEP_TZ || "Asia/Kolkata",
   dataDir: path.resolve(process.env.NEXTSTEP_DATA_DIR || "./data"),
   candidateId: process.env.NEXTSTEP_CANDIDATE_ID || "",

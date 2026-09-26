@@ -4,13 +4,13 @@ import { NextStepAgent, type RunResult } from "../src/agent.ts";
 import { systemClock, type Clock } from "../src/clock.ts";
 import { config } from "../src/config.ts";
 import { Faults } from "../src/faults.ts";
-import { ClaudeModel } from "../src/model.ts";
+import { createModel, missingKeyMessage } from "../src/providers.ts";
 import { SituationStore } from "../src/store.ts";
 import { MockOutbox } from "../src/tools/sendMessage.ts";
 
 export function requireApiKey(): void {
   if (!config.hasApiKey) {
-    console.error("ANTHROPIC_API_KEY is not set. Put it in a .env file (see .env.example). Offline checks: npm test, npm run demo:blockers");
+    console.error(missingKeyMessage());
     process.exit(1);
   }
 }
@@ -20,7 +20,7 @@ export function liveAgent(dataSubdir: string, clock: Clock = systemClock) {
   const store = new SituationStore(dir, clock);
   const faults = new Faults();
   const outbox = new MockOutbox(dir);
-  const agent = new NextStepAgent({ store, model: new ClaudeModel(config.model), outbox, faults });
+  const agent = new NextStepAgent({ store, model: createModel(), outbox, faults });
   return { agent, store, faults, outbox };
 }
 

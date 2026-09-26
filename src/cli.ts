@@ -5,12 +5,12 @@ import { stdin, stdout } from "node:process";
 import { NextStepAgent, type RunResult } from "./agent.ts";
 import { systemClock } from "./clock.ts";
 import { config } from "./config.ts";
-import { ClaudeModel } from "./model.ts";
+import { createModel, missingKeyMessage } from "./providers.ts";
 import { SituationStore } from "./store.ts";
 import { MockOutbox } from "./tools/sendMessage.ts";
 
 if (!config.hasApiKey) {
-  console.error("ANTHROPIC_API_KEY is not set. Create a .env file (see .env.example).");
+  console.error(missingKeyMessage());
   process.exit(1);
 }
 
@@ -18,7 +18,7 @@ const rl = createInterface({ input: stdin, output: stdout });
 const store = new SituationStore(config.dataDir, systemClock);
 const agent = new NextStepAgent({
   store,
-  model: new ClaudeModel(config.model),
+  model: createModel(),
   outbox: new MockOutbox(config.dataDir),
   onStep: process.env.NEXTSTEP_SHOW_TRACE ? (s) => console.log(`  [${s.label}] ${s.kind}: ${s.summary.split("\n")[0].slice(0, 120)}`) : undefined,
 });
